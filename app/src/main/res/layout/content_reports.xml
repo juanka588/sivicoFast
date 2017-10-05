@@ -11,7 +11,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/reports_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/report_item_view" />
 </android.support.v4.widget.SwipeRefreshLayout>

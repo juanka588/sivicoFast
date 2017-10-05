@@ -21,7 +21,6 @@
 
     <application
         android:allowBackup="true"
-        android:clearTaskOnLaunch="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:launchMode="singleInstance"
@@ -86,8 +85,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.rocket.sivico.GUI.NewReportActivity" />
         </activity>
-        <activity android:name=".GUI.UserActivity"
-            android:label="@string/title_activity_user"></activity>
+        <activity
+            android:name=".GUI.UserActivity"
+            android:label="@string/title_activity_user"
+            android:launchMode="singleInstance"></activity>
     </application>
 
 </manifest>

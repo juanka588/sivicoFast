@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group>
         <item
             android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Importar de otras cuentas" />
+            android:icon="@drawable/ic_points"
+            android:title="Mis Puntos" />
         <item
             android:id="@+id/nav_my_reports"
             android:icon="@drawable/ic_menu_slideshow"

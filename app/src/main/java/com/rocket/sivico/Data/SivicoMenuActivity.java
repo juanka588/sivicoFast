@@ -1,8 +1,6 @@
 package com.rocket.sivico.Data;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rocket.sivico.GUI.CategoryActivity;
-import com.rocket.sivico.GUI.MainActivity;
 import com.rocket.sivico.GUI.ReportsActivity;
 import com.rocket.sivico.GUI.UserActivity;
 import com.rocket.sivico.R;
@@ -63,10 +60,12 @@ public class SivicoMenuActivity extends AppCompatActivity implements NavigationV
     protected void loadActionBar() {
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        ImageView image = navigationView.getHeaderView(0).findViewById(R.id.circle_image);
-        TextView name = navigationView.getHeaderView(0).findViewById(R.id.user_name);
-        TextView email = navigationView.getHeaderView(0).findViewById(R.id.user_email);
-        //TODO: bind data
+        ImageView image = navigationView.getHeaderView(0).findViewById(R.id.user_image_nav);
+        TextView name = navigationView.getHeaderView(0).findViewById(R.id.user_name_nav);
+        TextView email = navigationView.getHeaderView(0).findViewById(R.id.user_email_nav);
+        User user = GlobalConfig.getUser();
+        name.setText(user.getName());
+        email.setText(user.getEmail());
         navigationView.getMenu().clear(); //clear old inflated items.
         navigationView.inflateMenu(R.menu.activity_reports_drawer); //inflate new items.
 
@@ -103,7 +102,7 @@ public class SivicoMenuActivity extends AppCompatActivity implements NavigationV
                 intent = new Intent(this, UserActivity.class);
                 break;
             default:
-                intent = new Intent(this, MainActivity.class);
+                intent = new Intent(this, ReportsActivity.class);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.rocket.sivico.Data.Category;
 import com.rocket.sivico.Interfaces.OnCategoryClick;
 import com.rocket.sivico.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -45,6 +44,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         if (layout == R.layout.category_item_view) {
             holder.number.setText((i + 1) + ".");
         } else if (layout == R.layout.category_main_item_view) {
+
 //            Picasso.with(holder.cv.getContext()).load(category.getTitle()).into(holder.image);
         }
     }

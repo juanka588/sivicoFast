@@ -7,19 +7,34 @@ package com.rocket.sivico.Data;
 public class User {
     private String id;
     private String name;
+    private String lastName;
     private String idNumber;
     private boolean gender;
     private int age;
     private String phone;
-    private String municipio;
-    private String barrio;
+    private String region;
+    private String neighborhood;
+    private String email;
 
-    public User(String name, String idNumber, boolean gender, int age, String phone) {
+
+    public User(String id, String name, String lastName,
+                String idNumber, boolean gender, int age,
+                String phone, String region, String neighborhood,
+                String email) {
+        this.id = id;
         this.name = name;
+        this.lastName = lastName;
         this.idNumber = idNumber;
         this.gender = gender;
         this.age = age;
         this.phone = phone;
+        this.region = region;
+        this.neighborhood = neighborhood;
+        this.email = email;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public String getName() {
@@ -66,19 +81,23 @@ public class User {
         this.phone = phone;
     }
 
-    public String getMunicipio() {
-        return municipio;
+    public String getRegion() {
+        return region;
     }
 
-    public void setMunicipio(String municipio) {
-        this.municipio = municipio;
+    public void setRegion(String region) {
+        this.region = region;
     }
 
-    public String getBarrio() {
-        return barrio;
+    public String getNeighborhood() {
+        return neighborhood;
     }
 
-    public void setBarrio(String barrio) {
-        this.barrio = barrio;
+    public void setNeighborhood(String neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

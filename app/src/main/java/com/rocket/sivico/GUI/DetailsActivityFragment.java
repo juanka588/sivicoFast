@@ -1,7 +1,8 @@
 package com.rocket.sivico.GUI;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.rocket.sivico.R;
  */
 public class DetailsActivityFragment extends Fragment {
 
+    private CollapsingToolbarLayout collapsingToolbarLayout;
+
     public DetailsActivityFragment() {
     }
 
@@ -25,7 +28,13 @@ public class DetailsActivityFragment extends Fragment {
         View inflate = inflater.inflate(R.layout.fragment_details, container, false);
         Bundle bundle = getArguments();
         Report report = bundle.getParcelable(GlobalConfig.PARAM_REPORT);
-        Toast.makeText(getContext(),report.getDescription(),Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), report.getDescription(), Toast.LENGTH_LONG).show();
+        manageToolbar(inflate);
         return inflate;
+    }
+
+    private void manageToolbar(View view) {
+        collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout.setTitle(getString(R.string.title_activity_details));
     }
 }

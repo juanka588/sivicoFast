@@ -3,18 +3,14 @@ package com.rocket.sivico.GUI;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
-import android.support.v4.widget.ImageViewCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +28,6 @@ import com.rocket.sivico.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.Calendar;
 
 /**
@@ -70,6 +64,7 @@ public class NewReportActivityFragment extends Fragment {
         if (imageUri != null) {
             displayPhoto();
         }
+//              getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         return view;
     }
 

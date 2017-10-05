@@ -35,4 +35,8 @@ public class GlobalConfig {
         }
         return categories;
     }
+
+    public static User getUser() {
+        return new User("asdsd55515", "Juan", "Rodriguez", "1013642638", true, 24, "+573216383891", "Bogota", "Restrepo", "juank@gmail.com");
+    }
 }
