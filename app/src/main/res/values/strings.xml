@@ -118,4 +118,12 @@
     <string name="email">email</string>
     <string name="score">Puntos:</string>
     <string name="location">Lugar</string>
+    <string name="facebook_app_id">357397514717772</string>
+    <string name="fb_login_protocol_scheme">fb357397514717772</string>
+    <string name="unknown_response">Error Desconocido</string>
+    <string name="sign_in_cancelled">Acceso cancelado</string>
+    <string name="no_internet_connection">No tienes conexion</string>
+    <string name="unknown_error">Error desconocido</string>
+    <string name="unknown_sign_in_response">Error de login desconocido</string>
+    <string name="no_reports">No tienes nigun reporte</string>
 </resources>

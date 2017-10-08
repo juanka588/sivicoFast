@@ -4,27 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.rocket.sivico.GUI.CategoryActivityFragment"
     android:weightSum="10"
+    tools:context="com.rocket.sivico.GUI.CategoryActivityFragment"
     tools:showIn="@layout/activity_category">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_category_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="7"
         android:layout_marginBottom="16dp"
+        android:layout_weight="7"
         tools:listitem="@layout/category_main_item_view">
 
     </android.support.v7.widget.RecyclerView>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/child_category_list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        tools:listitem="@layout/category_item_view">
+        android:orientation="vertical">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/child_category_list"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            tools:listitem="@layout/category_item_view">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
 </LinearLayout>

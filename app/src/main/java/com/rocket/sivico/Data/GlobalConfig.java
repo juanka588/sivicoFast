@@ -1,5 +1,7 @@
 package com.rocket.sivico.Data;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,11 +17,11 @@ public class GlobalConfig {
     public static final String PARAM_CATEGORY = "category";
 
     static {
-        temp.put(new String[]{"1", "SALUD", "red"}, new String[]{"INFANCIA", "ADOLESCENCIA", "JUVENTUD", "ADULTO", "VEJEZ"});
-        temp.put(new String[]{"2", "SEGURIDAD", "blue"}, new String[]{"ZONAS INSEGURAS", "COSUMO DE SUSTACIAS PSICOACTIVAS", "EXPENDIO DE SPA", "ABUSO DE AUTORIDAD"});
-        temp.put(new String[]{"3", "AMBIENTE", "yellow"}, new String[]{"DISPOSICION DE RESIDUOS", "CONTAMINACION DE FUENTE HIDRICA", "CONTAMINACION DE AIRE", "CONTAMINACION RUIDO"});
-        temp.put(new String[]{"4", "SERVICIOS PUBLICOS", "green"}, new String[]{"AGUA", "LUZ", "GAS", "ALCANTARILLADO", "TELEFONO"});
-        temp.put(new String[]{"5", "VIOLENCIA", "purple"}, new String[]{"INTRAFAMILIAR", "INFANCIA", "MUJER", "ADULTO MAYOR", "HOMBRE", "ANIMALES"});
+        temp.put(new String[]{"1", "SALUD", "#ba000d"}, new String[]{"INFANCIA", "ADOLESCENCIA", "JUVENTUD", "ADULTO", "VEJEZ"});
+        temp.put(new String[]{"2", "SEGURIDAD", "#001064"}, new String[]{"ZONAS INSEGURAS", "COSUMO DE SUSTACIAS PSICOACTIVAS", "EXPENDIO DE SPA", "ABUSO DE AUTORIDAD"});
+        temp.put(new String[]{"3", "AMBIENTE", "#ffea00"}, new String[]{"DISPOSICION DE RESIDUOS", "CONTAMINACION DE FUENTE HIDRICA", "CONTAMINACION DE AIRE", "CONTAMINACION RUIDO"});
+        temp.put(new String[]{"4", "SERVICIOS PUBLICOS", "#8bc34a"}, new String[]{"AGUA", "LUZ", "GAS", "ALCANTARILLADO", "TELEFONO"});
+        temp.put(new String[]{"5", "VIOLENCIA", "#4a148c"}, new String[]{"INTRAFAMILIAR", "INFANCIA", "MUJER", "ADULTO MAYOR", "HOMBRE", "ANIMALES"});
     }
 
     public static List<Category> initCategories() {
@@ -36,7 +38,15 @@ public class GlobalConfig {
         return categories;
     }
 
-    public static User getUser() {
-        return new User("asdsd55515", "Juan", "Rodriguez", "1013642638", true, 24, "+573216383891", "Bogota", "Restrepo", "juank@gmail.com");
+    public static User getUser(FirebaseUser user) {
+        return new User(user.getUid()
+                , user.getDisplayName()
+                , "1013642638"
+                , true
+                , 24
+                , user.getPhoneNumber()
+                , "Bogota"
+                , "Restrepo"
+                , user.getEmail(), user.getPhotoUrl().toString() + "");
     }
 }

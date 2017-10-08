@@ -1,7 +1,12 @@
 package com.rocket.sivico.Data;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,10 +19,18 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.rocket.sivico.GUI.CategoryActivity;
+import com.rocket.sivico.GUI.MainActivity;
 import com.rocket.sivico.GUI.ReportsActivity;
 import com.rocket.sivico.GUI.UserActivity;
 import com.rocket.sivico.R;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by JuanCamilo on 16/10/2016.
@@ -60,12 +73,39 @@ public class SivicoMenuActivity extends AppCompatActivity implements NavigationV
     protected void loadActionBar() {
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        ImageView image = navigationView.getHeaderView(0).findViewById(R.id.user_image_nav);
+        final ImageView image = navigationView.getHeaderView(0).findViewById(R.id.user_image_nav);
         TextView name = navigationView.getHeaderView(0).findViewById(R.id.user_name_nav);
         TextView email = navigationView.getHeaderView(0).findViewById(R.id.user_email_nav);
-        User user = GlobalConfig.getUser();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return;
+        }
+
+        User user = GlobalConfig.getUser(currentUser);
         name.setText(user.getName());
         email.setText(user.getEmail());
+
+        Picasso.with(this)
+                .load(currentUser.getPhotoUrl())
+                .into(image, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Bitmap source = ((BitmapDrawable) image.getDrawable()).getBitmap();
+                        RoundedBitmapDrawable drawable =
+                                RoundedBitmapDrawableFactory.create(SivicoMenuActivity.this
+                                        .getResources(), source);
+                        drawable.setCircular(true);
+                        drawable.setCornerRadius(Math.max(source.getWidth() / 2.0f, source.getHeight() / 2.0f));
+                        image.setImageDrawable(drawable);
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
         navigationView.getMenu().clear(); //clear old inflated items.
         navigationView.inflateMenu(R.menu.activity_reports_drawer); //inflate new items.
 
@@ -101,6 +141,9 @@ public class SivicoMenuActivity extends AppCompatActivity implements NavigationV
             case R.id.nav_manage:
                 intent = new Intent(this, UserActivity.class);
                 break;
+            case R.id.nav_sign_out:
+                signOut();
+                return true;
             default:
                 intent = new Intent(this, ReportsActivity.class);
         }
@@ -113,11 +156,29 @@ public class SivicoMenuActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+
+
+    }
+
+    public void signOut() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            startActivity(new Intent(SivicoMenuActivity.this, MainActivity.class));
+                            finish();
+                        } else {
+                            Log.e(TAG, "signOut failed");
+                        }
+                    }
+                });
     }
 }

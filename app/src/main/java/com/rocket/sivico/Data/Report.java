@@ -1,6 +1,5 @@
 package com.rocket.sivico.Data;
 
-import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -20,6 +19,9 @@ public class Report implements Parcelable {
     private long lat;
     private long lon;
     private Category category;
+
+    public Report() {
+    }
 
     public Report(String id, String description, Category category) {
         this(id, new Date().getTime(), description, new ArrayList<String>(1), 0, 0, category);

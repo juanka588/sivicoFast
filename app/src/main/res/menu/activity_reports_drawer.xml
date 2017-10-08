@@ -14,6 +14,10 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Mis Datos" />
+        <item
+            android:id="@+id/nav_sign_out"
+            android:icon="@drawable/com_facebook_button_login_logo"
+            android:title="Desconectarme" />
     </group>
 
     <item android:title="Communicate">

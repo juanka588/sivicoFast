@@ -7,7 +7,6 @@ package com.rocket.sivico.Data;
 public class User {
     private String id;
     private String name;
-    private String lastName;
     private String idNumber;
     private boolean gender;
     private int age;
@@ -15,15 +14,13 @@ public class User {
     private String region;
     private String neighborhood;
     private String email;
+    private String photo;
 
-
-    public User(String id, String name, String lastName,
-                String idNumber, boolean gender, int age,
+    public User(String id, String name, String idNumber, boolean gender, int age,
                 String phone, String region, String neighborhood,
-                String email) {
+                String email, String photo) {
         this.id = id;
         this.name = name;
-        this.lastName = lastName;
         this.idNumber = idNumber;
         this.gender = gender;
         this.age = age;
@@ -31,10 +28,11 @@ public class User {
         this.region = region;
         this.neighborhood = neighborhood;
         this.email = email;
+        this.photo = photo;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getPhoto() {
+        return photo;
     }
 
     public String getName() {

@@ -89,6 +89,8 @@
             android:name=".GUI.UserActivity"
             android:label="@string/title_activity_user"
             android:launchMode="singleInstance"></activity>
+
+
     </application>
 
 </manifest>
