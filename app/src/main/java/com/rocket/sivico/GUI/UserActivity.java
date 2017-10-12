@@ -1,7 +1,6 @@
 package com.rocket.sivico.GUI;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -13,16 +12,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.rocket.sivico.Data.GlobalConfig;
 import com.rocket.sivico.Data.SivicoMenuActivity;
 import com.rocket.sivico.Data.User;
+import com.rocket.sivico.Interfaces.OnUserReady;
 import com.rocket.sivico.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-public class UserActivity extends SivicoMenuActivity {
+public class UserActivity extends SivicoMenuActivity implements OnUserReady {
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
 
@@ -32,17 +30,10 @@ public class UserActivity extends SivicoMenuActivity {
         setContentView(R.layout.activity_user);
         loadActionBar();
         manageToolbar();
-        bindUserData();
+        GlobalConfig.getUser(firebaseUser, this);
     }
 
-    private void bindUserData() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-            return;
-        }
-        User user = GlobalConfig.getUser(currentUser);
+    private void bindUserData(User user) {
         TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         String mPhoneNumber = tMgr.getLine1Number();
         TextView phone = findViewById(R.id.user_phone);
@@ -58,7 +49,7 @@ public class UserActivity extends SivicoMenuActivity {
         gender.setText(user.isGender() ? "Masculino" : "Femenino");
 
         TextView age = findViewById(R.id.user_age);
-        age.setText(user.getAge() + "");
+        age.setText(user.getBirthday() + "");
 
         TextView region = findViewById(R.id.user_region);
         region.setText(user.getRegion());
@@ -71,7 +62,7 @@ public class UserActivity extends SivicoMenuActivity {
 
         final ImageView image = findViewById(R.id.user_photo);
         Picasso.with(this)
-                .load(currentUser.getPhotoUrl())
+                .load(user.getPhoto())
                 .into(image, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -89,10 +80,14 @@ public class UserActivity extends SivicoMenuActivity {
 
                     }
                 });
-
         ProgressBar progressBar = findViewById(R.id.user_score_progress);
-        progressBar.setProgress(30);
+        progressBar.setProgress(user.getScore());
+    }
 
+    @Override
+    public void onUserReady(User user) {
+        super.onUserReady(user);
+        bindUserData(user);
     }
 
     private void manageToolbar() {

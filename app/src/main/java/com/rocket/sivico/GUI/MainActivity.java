@@ -14,6 +14,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.rocket.sivico.R;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         enterBtn = findViewById(R.id.enter_button);
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             startActivity(new Intent(this, ReportsActivity.class));
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(
                 AuthUI.getInstance().createSignInIntentBuilder()
                         .setTheme(AuthUI.getDefaultTheme())
-                        .setLogo(AuthUI.NO_LOGO)
+                        .setLogo(R.mipmap.ic_launcher)
                         .setAvailableProviders(getSelectedProviders())
                         .setTosUrl(FIREBASE_TOS_URL)
                         .setPrivacyPolicyUrl(FIREBASE_PRIVACY_POLICY_URL)

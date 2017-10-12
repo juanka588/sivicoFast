@@ -3,48 +3,33 @@ package com.rocket.sivico.Data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created by JuanCamilo on 28/09/2017.
  */
 
 public class Report implements Parcelable {
-    private String id;
-    private long date;
+    private String date;
     private String description;
-    private List<String> evidences;
-    private long lat;
-    private long lon;
-    private Category category;
+    private String lat;
+    private String lon;
+    private String category;
+    private String owner;
+    private String color;
+    private Map<String, Object> evidence;
 
     public Report() {
     }
 
-    public Report(String id, String description, Category category) {
-        this(id, new Date().getTime(), description, new ArrayList<String>(1), 0, 0, category);
-    }
-
-    public Report(String id, long date, String description, List<String> evidences, long lat, long lon, Category category) {
-        this.id = id;
-        this.date = date;
-        this.description = description;
-        this.evidences = evidences;
-        this.lat = lat;
-        this.lon = lon;
-        this.category = category;
-    }
-
     protected Report(Parcel in) {
-        id = in.readString();
-        date = in.readLong();
+        date = in.readString();
         description = in.readString();
-        evidences = in.createStringArrayList();
-        lat = in.readLong();
-        lon = in.readLong();
-        category = in.readParcelable(Category.class.getClassLoader());
+        lat = in.readString();
+        lon = in.readString();
+        category = in.readString();
+        owner = in.readString();
+        color = in.readString();
     }
 
     public static final Creator<Report> CREATOR = new Creator<Report>() {
@@ -59,11 +44,11 @@ public class Report implements Parcelable {
         }
     };
 
-    public String getId() {
-        return id;
+    public String getColor() {
+        return color;
     }
 
-    public long getTime() {
+    public String getDate() {
         return date;
     }
 
@@ -71,20 +56,24 @@ public class Report implements Parcelable {
         return description;
     }
 
-    public List<String> getEvidences() {
-        return evidences;
-    }
-
-    public long getLat() {
+    public String getLat() {
         return lat;
     }
 
-    public long getLon() {
+    public String getLon() {
         return lon;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public Map<String, Object> getEvidence() {
+        return evidence;
     }
 
     @Override
@@ -94,12 +83,12 @@ public class Report implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id);
-        parcel.writeLong(date);
+        parcel.writeString(date);
         parcel.writeString(description);
-        parcel.writeStringList(evidences);
-        parcel.writeLong(lat);
-        parcel.writeLong(lon);
-        parcel.writeParcelable(category, i);
+        parcel.writeString(lat);
+        parcel.writeString(lon);
+        parcel.writeString(category);
+        parcel.writeString(owner);
+        parcel.writeString(color);
     }
 }

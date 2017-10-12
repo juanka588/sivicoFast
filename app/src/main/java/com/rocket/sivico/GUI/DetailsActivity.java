@@ -19,7 +19,6 @@ public class DetailsActivity extends SivicoMenuActivity {
         fragment.setArguments(getIntent().getExtras());
         fragmentTransaction.replace(R.id.container, fragment);
         fragmentTransaction.commit();
-
     }
 
 

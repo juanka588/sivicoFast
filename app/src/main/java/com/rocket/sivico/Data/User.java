@@ -9,26 +9,33 @@ public class User {
     private String name;
     private String idNumber;
     private boolean gender;
-    private int age;
+    private String birthday;
     private String phone;
     private String region;
     private String neighborhood;
     private String email;
     private String photo;
+    private int score;
 
-    public User(String id, String name, String idNumber, boolean gender, int age,
+
+    public User(String id, String name, String idNumber, boolean gender, String birthday,
                 String phone, String region, String neighborhood,
-                String email, String photo) {
+                String email, String photo, int score) {
         this.id = id;
         this.name = name;
         this.idNumber = idNumber;
         this.gender = gender;
-        this.age = age;
+        this.birthday = birthday;
         this.phone = phone;
         this.region = region;
         this.neighborhood = neighborhood;
         this.email = email;
         this.photo = photo;
+        this.score = score;
+    }
+
+    public int getScore() {
+        return score;
     }
 
     public String getPhoto() {
@@ -63,12 +70,12 @@ public class User {
         this.gender = gender;
     }
 
-    public int getAge() {
-        return age;
+    public String getBirthday() {
+        return birthday;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public String getPhone() {

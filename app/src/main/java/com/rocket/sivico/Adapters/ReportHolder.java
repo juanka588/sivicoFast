@@ -1,11 +1,13 @@
-package com.rocket.sivico.Data;
+package com.rocket.sivico.Adapters;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.rocket.sivico.Data.Report;
 import com.rocket.sivico.R;
 import com.rocket.sivico.Utils;
 
@@ -29,11 +31,10 @@ public class ReportHolder extends RecyclerView.ViewHolder {
         image = itemView.findViewById(R.id.report_image);
     }
 
-
-    public void bind(ReportTemp report) {
-//        this.image.setBackgroundColor(Color.parseColor(report.getCategory().getColor()));
+    public void bind(Report report) {
         this.title.setText(report.getDescription());
         this.date.setText(Utils.getFormatDate(Long.parseLong(report.getDate())));
         this.hour.setText(Utils.getHour(Long.parseLong(report.getDate())));
+        Log.e("bind holder", report.getEvidence().get("img1").toString());
     }
 }

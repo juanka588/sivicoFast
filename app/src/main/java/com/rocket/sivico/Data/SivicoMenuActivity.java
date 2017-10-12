@@ -28,6 +28,7 @@ import com.rocket.sivico.GUI.CategoryActivity;
 import com.rocket.sivico.GUI.MainActivity;
 import com.rocket.sivico.GUI.ReportsActivity;
 import com.rocket.sivico.GUI.UserActivity;
+import com.rocket.sivico.Interfaces.OnUserReady;
 import com.rocket.sivico.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -36,12 +37,18 @@ import com.squareup.picasso.Picasso;
  * Created by JuanCamilo on 16/10/2016.
  */
 
-public class SivicoMenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class SivicoMenuActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener
+        , OnUserReady {
 
     private static final String TAG = SivicoMenuActivity.class.getSimpleName();
     protected NavigationView navigationView;
     protected Toolbar mToolbar;
     private DrawerLayout drawerLayout;
+    private ImageView image;
+    private TextView name;
+    private TextView email;
+    protected FirebaseUser firebaseUser;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -70,25 +77,13 @@ public class SivicoMenuActivity extends AppCompatActivity implements NavigationV
         return true;
     }
 
-    protected void loadActionBar() {
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        final ImageView image = navigationView.getHeaderView(0).findViewById(R.id.user_image_nav);
-        TextView name = navigationView.getHeaderView(0).findViewById(R.id.user_name_nav);
-        TextView email = navigationView.getHeaderView(0).findViewById(R.id.user_email_nav);
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser == null) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-            return;
-        }
-
-        User user = GlobalConfig.getUser(currentUser);
+    @Override
+    public void onUserReady(User user) {
         name.setText(user.getName());
         email.setText(user.getEmail());
 
         Picasso.with(this)
-                .load(currentUser.getPhotoUrl())
+                .load(user.getPhoto())
                 .into(image, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -106,6 +101,21 @@ public class SivicoMenuActivity extends AppCompatActivity implements NavigationV
 
                     }
                 });
+    }
+
+    protected void loadActionBar() {
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        image = navigationView.getHeaderView(0).findViewById(R.id.user_image_nav);
+        name = navigationView.getHeaderView(0).findViewById(R.id.user_name_nav);
+        email = navigationView.getHeaderView(0).findViewById(R.id.user_email_nav);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return;
+        }
+        GlobalConfig.getUser(firebaseUser, this);
         navigationView.getMenu().clear(); //clear old inflated items.
         navigationView.inflateMenu(R.menu.activity_reports_drawer); //inflate new items.
 

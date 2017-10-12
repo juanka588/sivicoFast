@@ -40,4 +40,10 @@ public class Utils {
         mCurrentPhotoPath.concat(image.getAbsolutePath());
         return image;
     }
+
+    public static String getPhotoName() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        return imageFileName + ".jpg";
+    }
 }

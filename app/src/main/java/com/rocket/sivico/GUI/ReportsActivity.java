@@ -17,10 +17,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.rocket.sivico.Adapters.ReportHolder;
 import com.rocket.sivico.Data.GlobalConfig;
 import com.rocket.sivico.Data.Report;
-import com.rocket.sivico.Data.ReportHolder;
-import com.rocket.sivico.Data.ReportTemp;
 import com.rocket.sivico.Data.SivicoMenuActivity;
 import com.rocket.sivico.Interfaces.OnReportClick;
 import com.rocket.sivico.R;
@@ -35,7 +34,7 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
     private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
 
     private LinearLayoutManager mManager;
-    private FirebaseRecyclerAdapter<ReportTemp, ReportHolder> mAdapter;
+    private FirebaseRecyclerAdapter<Report, ReportHolder> mAdapter;
     protected TextView mEmptyListMessage;
     private RecyclerView reportList;
 
@@ -121,22 +120,22 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
         return mRegistry;
     }
 
-    protected FirebaseRecyclerAdapter<ReportTemp, ReportHolder> getAdapter() {
-        Query lastFifty = mReportRef.limitToLast(50);
-        return new FirebaseRecyclerAdapter<ReportTemp, ReportHolder>(
-                ReportTemp.class,
+
+    protected FirebaseRecyclerAdapter<Report, ReportHolder> getAdapter() {
+        Query query = mReportRef.orderByKey();
+        return new FirebaseRecyclerAdapter<Report, ReportHolder>(
+                Report.class,
                 R.layout.report_item_view,
                 ReportHolder.class,
-                lastFifty,
+                query,
                 this) {
             @Override
-            public void populateViewHolder(ReportHolder holder, ReportTemp report, int position) {
+            public void populateViewHolder(ReportHolder holder, final Report report, int position) {
                 holder.bind(report);
                 holder.cv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-//                callBack.onReportClick(report);
+                        ReportsActivity.this.onReportClick(report);
                     }
                 });
             }
@@ -148,4 +147,5 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
             }
         };
     }
+
 }

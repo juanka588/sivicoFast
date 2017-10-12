@@ -40,6 +40,6 @@ public class DetailsActivityFragment extends Fragment {
     private void manageToolbar(View view, Report report) {
         collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(getString(R.string.title_activity_details));
-        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(report.getCategory().getColor()));
+        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(report.getColor()));
     }
 }

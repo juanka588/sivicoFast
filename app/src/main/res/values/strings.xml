@@ -113,7 +113,7 @@
     <string name="region">Municipio</string>
     <string name="neighborhood">Barrio:</string>
     <string name="gender">Genero</string>
-    <string name="age">Edad</string>
+    <string name="birthday">Edad</string>
     <string name="phone">Telefono</string>
     <string name="email">email</string>
     <string name="score">Puntos:</string>
