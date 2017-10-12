@@ -80,7 +80,7 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
         Query query = subCatRef.orderByChild("parent").startAt(category.getId()).endAt(category.getId());
         return new FirebaseRecyclerAdapter<SubCategory, SubCategoryHolder>(
                 SubCategory.class,
-                R.layout.category_main_item_view,
+                R.layout.category_item_view,
                 SubCategoryHolder.class,
                 query,
                 this) {

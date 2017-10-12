@@ -6,6 +6,7 @@ import android.os.Environment;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -16,13 +17,26 @@ import java.util.Locale;
 public class Utils {
     public static SimpleDateFormat sivicoDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     public static SimpleDateFormat sivicoHourFormat = new SimpleDateFormat("hh:mm:ss a", Locale.getDefault());
+    public static SimpleDateFormat sivicoAge = new SimpleDateFormat("yyyy", Locale.getDefault());
 
     public static String getHour(long timestamp) {
-        return sivicoHourFormat.format(new Date(timestamp));
+        return sivicoHourFormat.format(new Date(timestamp * 1000));
     }
 
     public static String getFormatDate(long timestamp) {
-        return sivicoDateFormat.format(new Date(timestamp));
+        return sivicoDateFormat.format(new Date(timestamp * 1000));
+    }
+
+    public static String getAge(String timestamp) {
+        return getAge(Long.parseLong(timestamp));
+    }
+
+    public static String getAge(long timestamp) {
+        int yearEnd = Calendar.getInstance().get(Calendar.YEAR);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(timestamp * 1000));
+        int yearInit = calendar.get(Calendar.YEAR);
+        return String.valueOf(yearEnd - yearInit);
     }
 
     private File createImageFile(String mCurrentPhotoPath, Context context) throws IOException {

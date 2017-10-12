@@ -5,7 +5,7 @@ package com.rocket.sivico.Data;
  */
 
 public class Category {
-    private int id;
+    private String id;
     private String name;
     private String color;
     private String icon;
@@ -18,7 +18,7 @@ public class Category {
         return description;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

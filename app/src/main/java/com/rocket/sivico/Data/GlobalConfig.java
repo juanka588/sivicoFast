@@ -42,7 +42,7 @@ public class GlobalConfig {
                 , user.getDisplayName()
                 , "1013642638"
                 , true
-                , 24
+                , "1148644800"
                 , user.getPhoneNumber()
                 , "Bogota"
                 , "Restrepo"

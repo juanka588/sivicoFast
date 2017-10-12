@@ -18,7 +18,7 @@ public class CategoryHolder extends RecyclerView.ViewHolder {
     public CardView cv;
     LinearLayout ll;
     TextView title;
-    TextView number;
+    TextView description;
     ImageView image;
 
     CategoryHolder(View itemView) {
@@ -26,12 +26,13 @@ public class CategoryHolder extends RecyclerView.ViewHolder {
         cv = itemView.findViewById(R.id.card_view_category);
         ll = itemView.findViewById(R.id.category_background);
         title = itemView.findViewById(R.id.category_title);
-        number = itemView.findViewById(R.id.category_number);
+        description = itemView.findViewById(R.id.category_description);
         image = itemView.findViewById(R.id.category_image);
     }
 
     public void bind(Category category) {
         this.title.setText(category.getName());
+        this.description.setText(category.getDescription());
 //            Picasso.with(this.cv.getContext()).load(category.getIcon()).into(this.image);
 
     }

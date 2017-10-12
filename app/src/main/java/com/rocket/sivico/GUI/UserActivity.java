@@ -17,6 +17,7 @@ import com.rocket.sivico.Data.SivicoMenuActivity;
 import com.rocket.sivico.Data.User;
 import com.rocket.sivico.Interfaces.OnUserReady;
 import com.rocket.sivico.R;
+import com.rocket.sivico.Utils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -49,7 +50,7 @@ public class UserActivity extends SivicoMenuActivity implements OnUserReady {
         gender.setText(user.isGender() ? "Masculino" : "Femenino");
 
         TextView age = findViewById(R.id.user_age);
-        age.setText(user.getBirthday() + "");
+        age.setText(Utils.getAge(user.getBirthday()));
 
         TextView region = findViewById(R.id.user_region);
         region.setText(user.getRegion());

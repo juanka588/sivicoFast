@@ -32,11 +32,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.rocket.sivico.Data.GlobalConfig;
 import com.rocket.sivico.Data.SubCategory;
 import com.rocket.sivico.R;
@@ -217,15 +215,15 @@ public class NewReportActivityFragment extends Fragment
         if (located) {
             return;
         }
-        mMap.clear();
+//        mMap.clear();
         Log.i(TAG, "New Location");
         located = true;
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         final LatLng latLng = new LatLng(latitude, longitude);
         userPos = latLng;
-        mMap.addMarker(new MarkerOptions().position(userPos).title("Sitio de la denuncia"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(userPos));
+//        mMap.addMarker(new MarkerOptions().position(userPos).title("Sitio de la denuncia"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(userPos));
         Log.i(TAG, location.toString());
     }
 
