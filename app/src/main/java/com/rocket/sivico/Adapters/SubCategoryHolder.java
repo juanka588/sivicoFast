@@ -30,8 +30,9 @@ public class SubCategoryHolder extends RecyclerView.ViewHolder {
         image = itemView.findViewById(R.id.category_image);
     }
 
-    public void bind(SubCategory subCategory) {
+    public void bind(SubCategory subCategory, int position) {
         this.title.setText(subCategory.getName());
+        this.number.setText(String.valueOf(position));
 //            Picasso.with(this.cv.getContext()).load(category.getIcon()).into(this.image);
 
     }

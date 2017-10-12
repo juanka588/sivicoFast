@@ -83,6 +83,9 @@ public class UserActivity extends SivicoMenuActivity implements OnUserReady {
                 });
         ProgressBar progressBar = findViewById(R.id.user_score_progress);
         progressBar.setProgress(user.getScore());
+
+        TextView scoreText = findViewById(R.id.user_score_text);
+        scoreText.setText("Points: " + user.getScore());
     }
 
     @Override

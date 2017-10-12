@@ -19,8 +19,16 @@ public class Utils {
     public static SimpleDateFormat sivicoHourFormat = new SimpleDateFormat("hh:mm:ss a", Locale.getDefault());
     public static SimpleDateFormat sivicoAge = new SimpleDateFormat("yyyy", Locale.getDefault());
 
+    public static String getHour(String timestamp) {
+        return getHour(Long.parseLong(timestamp));
+    }
+
     public static String getHour(long timestamp) {
         return sivicoHourFormat.format(new Date(timestamp * 1000));
+    }
+
+    public static String getFormatDate(String timestamp) {
+        return getFormatDate(Long.parseLong(timestamp));
     }
 
     public static String getFormatDate(long timestamp) {

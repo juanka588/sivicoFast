@@ -16,7 +16,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,9 +31,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.rocket.sivico.Data.GlobalConfig;
 import com.rocket.sivico.Data.SubCategory;
 import com.rocket.sivico.R;
@@ -99,24 +102,27 @@ public class NewReportActivityFragment extends Fragment
                 .setFastestInterval(1 * 1000);
 
         mGoogleClient.connect();
+
+
+        MapView mapView = view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        MapsInitializer.initialize(getContext());
+
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+                mMap.setMyLocationEnabled(true);
+                mMap.getUiSettings().setZoomControlsEnabled(true);
+            }
+        });
+
         return view;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        SupportMapFragment mapFragment = (SupportMapFragment) ((AppCompatActivity) activity).getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(new OnMapReadyCallback() {
-//            @Override
-//            public void onMapReady(GoogleMap googleMap) {
-//                mMap = googleMap;
-//            }
-//        });
-    }
-
     private void associateCategory(SubCategory category, View view) {
-
+        TextView cat = view.findViewById(R.id.report_category);
+        cat.setText(category.getName());
     }
 
     private void initControls(View view) {
@@ -125,7 +131,9 @@ public class NewReportActivityFragment extends Fragment
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                File photo = new File(Environment.getExternalStorageDirectory(), Utils.getPhotoName());
+                File folder = new File(Environment.getExternalStorageDirectory().toString() + "/" + GlobalConfig.SIVICO_DIR);
+                folder.mkdirs();
+                File photo = new File(folder.toString(), Utils.getPhotoName());
                 intent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photo));
                 imageUri = Uri.fromFile(photo);
@@ -150,7 +158,7 @@ public class NewReportActivityFragment extends Fragment
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
 
-                                hour.setText(hourOfDay + ":" + minute);
+                                hour.setText(hourOfDay + ":" + minute + " " + c.get(Calendar.AM_PM));
                             }
                         }, mHour, mMinute, false);
                 timePickerDialog.show();
@@ -207,23 +215,28 @@ public class NewReportActivityFragment extends Fragment
                 handleNewLocation(location);
             }
         });
-
     }
 
 
     private void handleNewLocation(Location location) {
+        if (mMap == null) {
+            located = false;
+        }
         if (located) {
             return;
         }
-//        mMap.clear();
         Log.i(TAG, "New Location");
         located = true;
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         final LatLng latLng = new LatLng(latitude, longitude);
         userPos = latLng;
-//        mMap.addMarker(new MarkerOptions().position(userPos).title("Sitio de la denuncia"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(userPos));
+        if (mMap != null) {
+            mMap.clear();
+            mMap.addMarker(new MarkerOptions().position(userPos).title("Sitio de la denuncia"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(userPos));
+            mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+        }
         Log.i(TAG, location.toString());
     }
 

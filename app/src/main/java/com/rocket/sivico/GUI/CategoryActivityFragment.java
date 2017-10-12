@@ -86,7 +86,7 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
                 this) {
             @Override
             public void populateViewHolder(SubCategoryHolder holder, final SubCategory subCategory, int position) {
-                holder.bind(subCategory);
+                holder.bind(subCategory, position + 1);
                 holder.cv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

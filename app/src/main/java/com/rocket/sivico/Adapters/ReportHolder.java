@@ -1,5 +1,6 @@
 package com.rocket.sivico.Adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.rocket.sivico.Data.Report;
 import com.rocket.sivico.R;
 import com.rocket.sivico.Utils;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by JuanCamilo on 7/10/2017.
@@ -35,6 +37,11 @@ public class ReportHolder extends RecyclerView.ViewHolder {
         this.title.setText(report.getDescription());
         this.date.setText(Utils.getFormatDate(Long.parseLong(report.getDate())));
         this.hour.setText(Utils.getHour(Long.parseLong(report.getDate())));
+        this.image.setBackgroundColor(Color.parseColor(report.getColor()));
         Log.e("bind holder", report.getEvidence().get("img1").toString());
+        Picasso.with(this.cv.getContext())
+                .load(report.getEvidence().get("img1").toString())
+                .fit()
+                .into(this.image);
     }
 }

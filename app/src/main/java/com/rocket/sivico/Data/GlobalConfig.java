@@ -10,27 +10,41 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rocket.sivico.Interfaces.OnUserReady;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by JuanCamilo on 2/10/2017.
  */
 
 public class GlobalConfig {
     public static final String PARAM_REPORT = "report";
-    public static final Map<String[], String[]> temp = new HashMap<>();
     public static final String PARAM_CATEGORY = "category";
     private static final String TAG = GlobalConfig.class.getSimpleName();
+    public static final String SIVICO_DIR = "sivico";
     public static DatabaseReference userRef;
 
 
-    public static void getUser(FirebaseUser user, OnUserReady callback) {
-        userRef = FirebaseDatabase.getInstance().getReference("users").getRef().child(user.getUid());
+    public static void getUser(final FirebaseUser user, final OnUserReady callback) {
+        userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e(TAG, dataSnapshot.child("name").getValue() + "");
+                if (dataSnapshot.exists()) {
+                    Log.e(TAG, dataSnapshot.child("name").getValue() + "");
+                    User userRet = new User(user.getUid()
+                            , dataSnapshot.child("name").getValue().toString()
+                            , dataSnapshot.child("id_number").getValue().toString()
+                            , dataSnapshot.child("gender").getValue() == "true"
+                            , dataSnapshot.child("birthday").getValue().toString()
+                            , dataSnapshot.child("phone").getValue().toString()
+                            , dataSnapshot.child("region").getValue().toString()
+                            , dataSnapshot.child("neighborhood").getValue().toString()
+                            , dataSnapshot.child("email").getValue().toString()
+                            , dataSnapshot.child("photo").getValue().toString()
+                            , ((Long) dataSnapshot.child("points").getValue()).intValue());
+                    callback.onUserReady(userRet);
+                } else {
+                    //TODO:launch a NewUserActivity to create new user
+                }
             }
 
             @Override
@@ -38,15 +52,6 @@ public class GlobalConfig {
 
             }
         });
-        User userRet = new User(user.getUid()
-                , user.getDisplayName()
-                , "1013642638"
-                , true
-                , "1148644800"
-                , user.getPhoneNumber()
-                , "Bogota"
-                , "Restrepo"
-                , user.getEmail(), user.getPhotoUrl().toString() + "", 78);
-        callback.onUserReady(userRet);
+
     }
 }

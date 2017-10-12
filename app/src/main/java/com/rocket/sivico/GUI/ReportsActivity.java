@@ -122,7 +122,8 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
 
 
     protected FirebaseRecyclerAdapter<Report, ReportHolder> getAdapter() {
-        Query query = mReportRef.orderByKey();
+        String id = mAuth.getCurrentUser().getUid();
+        Query query = mReportRef.orderByChild("owner").startAt(id).endAt(id);
         return new FirebaseRecyclerAdapter<Report, ReportHolder>(
                 Report.class,
                 R.layout.report_item_view,

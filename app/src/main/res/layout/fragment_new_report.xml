@@ -9,11 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:padding="32dp"
         tools:context="com.rocket.sivico.GUI.NewReportActivityFragment"
         tools:showIn="@layout/activity_new_report">
 
         <Button
             android:id="@+id/add_evidence_button"
+            style="@style/SivicoButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="seleccionar evidencia" />
@@ -63,10 +65,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="654654" />
+                android:text="12:37 PM" />
 
             <Button
                 android:id="@+id/edit_hour_button"
+                style="@style/SivicoButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/edit" />
@@ -91,6 +94,7 @@
 
             <Button
                 android:id="@+id/edit_date_button"
+                style="@style/SivicoButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/edit" />
@@ -101,9 +105,8 @@
             android:layout_height="wrap_content"
             android:text="@string/location" />
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
             android:layout_width="match_parent"
             android:layout_height="300dp" />
 

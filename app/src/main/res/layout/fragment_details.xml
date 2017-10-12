@@ -53,25 +53,35 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/description" />
+                android:text="@string/hour" />
+
+            <TextView
+                android:id="@+id/report_hour"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="15:35" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/large_text" />
+                android:text="@string/description" />
+
+            <TextView
+                android:id="@+id/report_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/location" />
 
-            <fragment
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                tools:context="com.rocket.sivico.GUI.MapsActivity" />
+                android:layout_height="300dp" />
         </LinearLayout>
+
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.AppBarLayout
@@ -91,7 +101,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
-                android:id="@+id/toolbar_background"
+                android:id="@+id/report_image"
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
                 android:minHeight="?attr/actionBarSize"

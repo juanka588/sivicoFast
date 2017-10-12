@@ -3,6 +3,10 @@ package com.rocket.sivico.Data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,6 +21,7 @@ public class Report implements Parcelable {
     private String category;
     private String owner;
     private String color;
+    private List<Evidence> evidencesList;
     private Map<String, Object> evidence;
 
     public Report() {
@@ -30,6 +35,7 @@ public class Report implements Parcelable {
         category = in.readString();
         owner = in.readString();
         color = in.readString();
+        evidencesList = in.createTypedArrayList(Evidence.CREATOR);
     }
 
     public static final Creator<Report> CREATOR = new Creator<Report>() {
@@ -43,6 +49,10 @@ public class Report implements Parcelable {
             return new Report[size];
         }
     };
+
+    public List<Evidence> getEvidencesList() {
+        return evidencesList;
+    }
 
     public String getColor() {
         return color;
@@ -76,6 +86,11 @@ public class Report implements Parcelable {
         return evidence;
     }
 
+
+    public LatLng getLatLng() {
+        return new LatLng(Double.parseDouble(this.getLat()), Double.parseDouble(this.getLon()));
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -90,5 +105,12 @@ public class Report implements Parcelable {
         parcel.writeString(category);
         parcel.writeString(owner);
         parcel.writeString(color);
+        if (getEvidence() != null) {
+            evidencesList = new ArrayList<>();
+            for (Map.Entry<String, Object> entry : getEvidence().entrySet()) {
+                evidencesList.add(new Evidence(entry.getKey(), entry.getValue().toString()));
+            }
+        }
+        parcel.writeTypedList(evidencesList);
     }
 }

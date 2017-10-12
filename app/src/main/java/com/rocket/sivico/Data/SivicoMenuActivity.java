@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.rocket.sivico.GUI.CategoryActivity;
 import com.rocket.sivico.GUI.MainActivity;
 import com.rocket.sivico.GUI.ReportsActivity;
@@ -190,5 +191,6 @@ public class SivicoMenuActivity extends AppCompatActivity
                         }
                     }
                 });
+        FirebaseDatabase.getInstance().setPersistenceEnabled(false);
     }
 }

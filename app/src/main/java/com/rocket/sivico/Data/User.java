@@ -17,7 +17,6 @@ public class User {
     private String photo;
     private int score;
 
-
     public User(String id, String name, String idNumber, boolean gender, String birthday,
                 String phone, String region, String neighborhood,
                 String email, String photo, int score) {
