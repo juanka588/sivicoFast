@@ -24,9 +24,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 import com.rocket.sivico.GUI.CategoryActivity;
 import com.rocket.sivico.GUI.MainActivity;
+import com.rocket.sivico.GUI.NewUserActivity;
 import com.rocket.sivico.GUI.ReportsActivity;
 import com.rocket.sivico.GUI.UserActivity;
 import com.rocket.sivico.Interfaces.OnUserReady;
@@ -102,6 +102,12 @@ public class SivicoMenuActivity extends AppCompatActivity
 
                     }
                 });
+    }
+
+    @Override
+    public void onNewUser(FirebaseUser user) {
+        Intent intent = new Intent(this, NewUserActivity.class);
+        startActivity(intent);
     }
 
     protected void loadActionBar() {
@@ -191,6 +197,5 @@ public class SivicoMenuActivity extends AppCompatActivity
                         }
                     }
                 });
-        FirebaseDatabase.getInstance().setPersistenceEnabled(false);
     }
 }

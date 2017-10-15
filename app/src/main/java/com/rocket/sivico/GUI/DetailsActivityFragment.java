@@ -43,7 +43,6 @@ public class DetailsActivityFragment extends Fragment {
         Report report = bundle.getParcelable(GlobalConfig.PARAM_REPORT);
         mapView = inflate.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-        MapsInitializer.initialize(getContext());
         bindReportData(inflate, report);
         manageToolbar(inflate, report);
         return inflate;
@@ -68,11 +67,14 @@ public class DetailsActivityFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
+                MapsInitializer.initialize(getContext());
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setZoomControlsEnabled(true);
                 LatLng position = report.getLatLng();
                 mMap.addMarker(new MarkerOptions().position(position).title("Sitio de la denuncia"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+                mapView.onResume();
             }
         });
     }

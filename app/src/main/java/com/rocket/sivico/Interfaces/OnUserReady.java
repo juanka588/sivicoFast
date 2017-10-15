@@ -1,5 +1,6 @@
 package com.rocket.sivico.Interfaces;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.rocket.sivico.Data.User;
 
 /**
@@ -8,4 +9,6 @@ import com.rocket.sivico.Data.User;
 
 public interface OnUserReady {
     void onUserReady(User user);
+
+    void onNewUser(FirebaseUser user);
 }

@@ -104,16 +104,17 @@ public class NewReportActivityFragment extends Fragment
         mGoogleClient.connect();
 
 
-        MapView mapView = view.findViewById(R.id.mapView);
+        final MapView mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-        MapsInitializer.initialize(getContext());
 
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
+                MapsInitializer.initialize(getContext());
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setZoomControlsEnabled(true);
+                mapView.onResume();
             }
         });
 
@@ -147,7 +148,7 @@ public class NewReportActivityFragment extends Fragment
             public void onClick(View view) {
                 // Get Current Time
                 final Calendar c = Calendar.getInstance();
-                mHour = c.get(Calendar.HOUR_OF_DAY);
+                mHour = c.get(Calendar.HOUR);
                 mMinute = c.get(Calendar.MINUTE);
 
                 // Launch Time Picker Dialog
@@ -158,7 +159,7 @@ public class NewReportActivityFragment extends Fragment
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
 
-                                hour.setText(hourOfDay + ":" + minute + " " + c.get(Calendar.AM_PM));
+                                hour.setText(hourOfDay + ":" + minute + " " + (c.get(Calendar.AM_PM) == 0 ? "AM" : "PM"));
                             }
                         }, mHour, mMinute, false);
                 timePickerDialog.show();

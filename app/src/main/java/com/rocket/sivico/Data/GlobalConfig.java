@@ -43,7 +43,7 @@ public class GlobalConfig {
                             , ((Long) dataSnapshot.child("points").getValue()).intValue());
                     callback.onUserReady(userRet);
                 } else {
-                    //TODO:launch a NewUserActivity to create new user
+                    callback.onNewUser(user);
                 }
             }
 

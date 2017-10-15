@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         enterBtn = findViewById(R.id.enter_button);
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            //TODO : revalidate if user is well created
             startActivity(new Intent(this, ReportsActivity.class));
             finish();
         } else {

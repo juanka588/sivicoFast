@@ -113,7 +113,8 @@
     <string name="region">Municipio</string>
     <string name="neighborhood">Barrio:</string>
     <string name="gender">Genero</string>
-    <string name="birthday">Edad</string>
+    <string name="birthday">Fecha de nacimiento</string>
+    <string name="age">Edad</string>
     <string name="phone">Telefono</string>
     <string name="email">email</string>
     <string name="score">Puntos:</string>
@@ -126,4 +127,8 @@
     <string name="unknown_error">Error desconocido</string>
     <string name="unknown_sign_in_response">Error de login desconocido</string>
     <string name="no_reports">No tienes nigun reporte</string>
+    <string name="prev">anterior</string>
+    <string name="next">siguiente</string>
+    <string name="title_activity_new_user">NewUserActivity</string>
+    <string name="name">Nombre:</string>
 </resources>

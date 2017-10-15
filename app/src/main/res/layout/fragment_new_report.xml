@@ -15,7 +15,7 @@
 
         <Button
             android:id="@+id/add_evidence_button"
-            style="@style/SivicoButtonStyle"
+            style="@style/FirebaseUI.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="seleccionar evidencia" />
@@ -69,7 +69,7 @@
 
             <Button
                 android:id="@+id/edit_hour_button"
-                style="@style/SivicoButtonStyle"
+                style="@style/FirebaseUI.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/edit" />
@@ -94,7 +94,7 @@
 
             <Button
                 android:id="@+id/edit_date_button"
-                style="@style/SivicoButtonStyle"
+                style="@style/FirebaseUI.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/edit" />

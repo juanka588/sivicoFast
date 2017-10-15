@@ -88,9 +88,11 @@
         <activity
             android:name=".GUI.UserActivity"
             android:label="@string/title_activity_user"
-            android:launchMode="singleInstance"></activity>
-
-
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".GUI.NewUserActivity"
+            android:label="@string/title_activity_new_user"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

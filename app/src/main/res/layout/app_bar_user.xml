@@ -229,7 +229,7 @@
                                     style="@style/textTitle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/birthday" />
+                                    android:text="@string/age" />
 
                                 <TextView
                                     android:id="@+id/user_age"
