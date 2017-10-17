@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -22,6 +22,7 @@
                 android:id="@+id/user_photo"
                 android:layout_width="180dp"
                 android:layout_height="180dp"
+                android:contentDescription="@string/preview_image"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/city" />
 
@@ -59,7 +60,7 @@
 
             <TextView
                 android:id="@+id/user_birthday"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"

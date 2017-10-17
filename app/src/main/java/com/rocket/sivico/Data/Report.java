@@ -27,6 +27,16 @@ public class Report implements Parcelable {
     public Report() {
     }
 
+    public Report(String date, String description, String lat, String lon, String category, String owner, String color) {
+        this.date = date;
+        this.description = description;
+        this.lat = lat;
+        this.lon = lon;
+        this.category = category;
+        this.owner = owner;
+        this.color = color;
+    }
+
     protected Report(Parcel in) {
         date = in.readString();
         description = in.readString();
@@ -112,5 +122,9 @@ public class Report implements Parcelable {
             }
         }
         parcel.writeTypedList(evidencesList);
+    }
+
+    public Map<String, Object> toMap() {
+        return null;
     }
 }

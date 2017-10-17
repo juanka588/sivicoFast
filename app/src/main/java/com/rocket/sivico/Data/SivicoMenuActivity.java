@@ -1,9 +1,15 @@
 package com.rocket.sivico.Data;
 
 import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -20,6 +26,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +40,7 @@ import com.rocket.sivico.GUI.MainActivity;
 import com.rocket.sivico.GUI.NewUserActivity;
 import com.rocket.sivico.GUI.ReportsActivity;
 import com.rocket.sivico.GUI.UserActivity;
+import com.rocket.sivico.Interfaces.HandleNewLocation;
 import com.rocket.sivico.Interfaces.OnUserReady;
 import com.rocket.sivico.R;
 import com.squareup.picasso.Callback;
@@ -40,8 +52,11 @@ import com.squareup.picasso.Picasso;
 
 public class SivicoMenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
-        , OnUserReady {
+        , OnUserReady, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+
+    private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 102;
     private static final String TAG = SivicoMenuActivity.class.getSimpleName();
     protected NavigationView navigationView;
     protected Toolbar mToolbar;
@@ -49,7 +64,27 @@ public class SivicoMenuActivity extends AppCompatActivity
     private ImageView image;
     private TextView name;
     private TextView email;
-    protected FirebaseUser firebaseUser;
+    public FirebaseUser firebaseUser;
+    private GoogleApiClient mGoogleClient;
+    public LatLng userPos;
+    public boolean located;
+    private LocationRequest mLocReq;
+    public HandleNewLocation locationCallback;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+        mGoogleClient = new GoogleApiClient.Builder(getApplicationContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mLocReq = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)
+                .setFastestInterval(1 * 1000);
+        mGoogleClient.connect();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -132,11 +167,9 @@ public class SivicoMenuActivity extends AppCompatActivity
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
 
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, drawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -199,4 +232,75 @@ public class SivicoMenuActivity extends AppCompatActivity
                     }
                 });
     }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.d(TAG, "onConnected");
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleClient);
+        if (location != null) {
+            handleNewLocation(location);
+
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleClient, mLocReq, new com.google.android.gms.location.LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                handleNewLocation(location);
+            }
+        });
+    }
+
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d(TAG, "ConnectionSuspended");
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        handleNewLocation(location);
+    }
+
+    public void handleNewLocation(Location location) {
+        if (located) {
+            return;
+        }
+        Log.i(TAG, "New Location");
+        located = true;
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        userPos = new LatLng(latitude, longitude);
+        locationCallback.handleNewLocation(location);
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "ConnectionFailed!!");
+        if (connectionResult.hasResolution()) {
+            try {
+                // Start an Activity that tries to resolve the error
+                connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            } catch (IntentSender.SendIntentException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
+        }
+    }
+
+
 }

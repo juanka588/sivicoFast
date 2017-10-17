@@ -53,6 +53,9 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
         layoutManagerMain = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mainCategoryList.setLayoutManager(layoutManagerMain);
         mainCategoryList.setAdapter(mainCatAdapter);
+
+        catRef.keepSynced(true);
+        subCatRef.keepSynced(true);
         return rootView;
     }
 

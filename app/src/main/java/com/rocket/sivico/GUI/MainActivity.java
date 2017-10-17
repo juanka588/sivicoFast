@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
     private void startSignedInActivity(IdpResponse response) {
         Log.i(TAG, response.getEmail());
         startActivity(new Intent(MainActivity.this, ReportsActivity.class));
+        finish();
     }
 
     private List<AuthUI.IdpConfig> getSelectedProviders() {

@@ -1,9 +1,7 @@
 package com.rocket.sivico.GUI;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.telephony.TelephonyManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,10 +27,8 @@ public class UserActivity extends SivicoMenuActivity implements OnUserReady {
     }
 
     private void bindUserData(User user) {
-        TelephonyManager tMgr = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        String mPhoneNumber = tMgr.getLine1Number();
         TextView phone = findViewById(R.id.user_phone);
-        phone.setText(mPhoneNumber);
+        phone.setText(user.getPhone());
 
         TextView name = findViewById(R.id.user_name);
         name.setText(user.getName());
@@ -61,7 +57,7 @@ public class UserActivity extends SivicoMenuActivity implements OnUserReady {
         progressBar.setProgress(user.getScore());
 
         TextView scoreText = findViewById(R.id.user_score_text);
-        scoreText.setText("Points: " + user.getScore());
+        scoreText.setText(getString(R.string.points) + user.getScore());
     }
 
     @Override

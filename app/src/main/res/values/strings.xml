@@ -132,4 +132,18 @@
     <string name="title_activity_new_user">NewUserActivity</string>
     <string name="name">Nombre:</string>
     <string name="please_select">Seleccione por favor</string>
+    <string name="banner_image">Logo Sivico</string>
+    <string name="user_image">Foto Usuario</string>
+    <string name="trusted_data">Datos de usuario</string>
+    <string name="category_logo">Logo Categoria</string>
+    <string name="preview_image">Imagen de prueba</string>
+    <string name="report_image">evidencia</string>
+    <string name="my_score">Mis Puntos</string>
+    <string name="my_reports">Mis Denuncias</string>
+    <string name="my_user_data">Mis Datos</string>
+    <string name="sign_out">Desconectarme</string>
+    <string name="communicate">Communicate</string>
+    <string name="share">Compartir</string>
+    <string name="new_report">Nueva</string>
+    <string name="points">Puntos:</string>
 </resources>

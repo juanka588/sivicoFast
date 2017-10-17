@@ -29,6 +29,7 @@
                 android:id="@+id/toolbar_background"
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
+                android:contentDescription="@string/banner_image"
                 android:minHeight="?attr/actionBarSize"
                 android:scaleType="centerCrop"
                 android:src="@drawable/city"
@@ -63,6 +64,7 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_gravity="center"
+                android:contentDescription="@string/user_image"
                 android:src="@mipmap/ic_launcher_round" />
 
 
@@ -78,11 +80,10 @@
 
                     <TextView
                         android:id="@+id/user_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Juan Camilo"
                         android:textSize="20sp" />
                 </LinearLayout>
 
@@ -98,8 +99,7 @@
                     android:id="@+id/user_score_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="500 pts" />
+                    android:gravity="center" />
             </LinearLayout>
 
             <android.support.v7.widget.CardView
@@ -107,6 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:clickable="true"
+                android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 card_view:cardCornerRadius="2dp">
 
@@ -119,6 +120,7 @@
                         android:id="@+id/imageView2"
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
+                        android:contentDescription="@string/trusted_data"
                         android:padding="16dp"
                         app:srcCompat="@drawable/ic_verified_user" />
 
@@ -138,8 +140,7 @@
                         <TextView
                             android:id="@+id/user_phone"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="3216383891" />
+                            android:layout_height="wrap_content" />
 
                         <TextView
                             style="@style/textTitle"
@@ -150,8 +151,7 @@
                         <TextView
                             android:id="@+id/user_email"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="carlos.martinez@gmail.com" />
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -161,6 +161,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:clickable="true"
+                android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 card_view:cardCornerRadius="2dp">
 
@@ -172,6 +173,7 @@
                     <ImageView
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
+                        android:contentDescription="@string/trusted_data"
                         android:padding="16dp"
                         app:srcCompat="@drawable/ic_person" />
 
@@ -191,12 +193,12 @@
                         <TextView
                             android:id="@+id/user_id_number"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="1013642638" />
+                            android:layout_height="wrap_content" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:baselineAligned="false"
                             android:orientation="horizontal">
 
 
@@ -215,8 +217,7 @@
                                 <TextView
                                     android:id="@+id/user_gender"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Masculino" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -234,8 +235,7 @@
                                 <TextView
                                     android:id="@+id/user_age"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="24" />
+                                    android:layout_height="wrap_content" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -248,6 +248,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:clickable="true"
+                android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 card_view:cardCornerRadius="2dp">
 
@@ -259,6 +260,7 @@
                     <ImageView
                         android:layout_width="80dp"
                         android:layout_height="match_parent"
+                        android:contentDescription="@string/trusted_data"
                         android:padding="16dp"
                         app:srcCompat="@drawable/ic_my_location" />
 
@@ -277,8 +279,7 @@
                         <TextView
                             android:id="@+id/user_region"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Bogota" />
+                            android:layout_height="wrap_content" />
 
                         <TextView
                             style="@style/textTitle"
@@ -289,8 +290,7 @@
                         <TextView
                             android:id="@+id/user_neighborhood"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Restrepo" />
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>

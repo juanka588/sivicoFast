@@ -15,6 +15,7 @@
     <ImageView
         android:id="@+id/user_image_nav"
         android:layout_width="60dp"
+        android:contentDescription="@string/user_image"
         android:layout_height="60dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@android:drawable/sym_def_app_icon" />

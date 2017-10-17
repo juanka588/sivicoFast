@@ -9,7 +9,8 @@
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="2dp"
-    card_view:cardElevation="5dp">
+    card_view:cardElevation="5dp"
+    android:focusable="true">
 
     <LinearLayout
         android:id="@+id/report_background"
@@ -23,6 +24,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center_vertical"
             android:layout_margin="3dp"
+            android:contentDescription="@string/report_image"
             android:background="@android:color/darker_gray"
             android:src="@mipmap/ic_launcher_round"
             android:textColor="@android:color/white" />

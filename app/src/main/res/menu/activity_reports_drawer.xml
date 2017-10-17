@@ -5,31 +5,31 @@
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_points"
-            android:title="Mis Puntos" />
+            android:title="@string/my_score" />
         <item
             android:id="@+id/nav_my_reports"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Mis Denuncias" />
+            android:title="@string/my_reports" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Mis Datos" />
+            android:title="@string/my_user_data" />
         <item
             android:id="@+id/nav_sign_out"
             android:icon="@drawable/com_facebook_button_login_logo"
-            android:title="Desconectarme" />
+            android:title="@string/sign_out" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/communicate">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Compartir" />
+                android:title="@string/share" />
             <item
                 android:id="@+id/nav_new_report"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Nueva" />
+                android:title="@string/new_report" />
         </menu>
     </item>
 

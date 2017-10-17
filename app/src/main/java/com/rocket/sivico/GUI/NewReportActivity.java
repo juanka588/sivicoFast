@@ -3,11 +3,11 @@ package com.rocket.sivico.GUI;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 
+import com.rocket.sivico.Data.SivicoMenuActivity;
 import com.rocket.sivico.R;
 
-public class NewReportActivity extends AppCompatActivity {
+public class NewReportActivity extends SivicoMenuActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
