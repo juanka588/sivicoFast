@@ -1,5 +1,8 @@
 package com.rocket.sivico.Data;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by JuanCamilo on 28/09/2017.
  */
@@ -103,5 +106,22 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> mMap = new HashMap<>();
+        mMap.put("name", getName());
+        mMap.put("phone", getPhone());
+        mMap.put("birthday", getBirthday());
+        mMap.put("gender", isGender());
+        mMap.put("region", getRegion());
+        mMap.put("neighborhood", getNeighborhood());
+        mMap.put("email", getEmail());
+        mMap.put("photo", getPhoto());
+        mMap.put("id_number", getIdNumber());
+        mMap.put("lat", 0);
+        mMap.put("lon", 0);
+        mMap.put("points", getScore());
+        return mMap;
     }
 }

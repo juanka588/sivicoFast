@@ -1,12 +1,8 @@
 package com.rocket.sivico.GUI;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.telephony.TelephonyManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -18,8 +14,6 @@ import com.rocket.sivico.Data.User;
 import com.rocket.sivico.Interfaces.OnUserReady;
 import com.rocket.sivico.R;
 import com.rocket.sivico.Utils;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 public class UserActivity extends SivicoMenuActivity implements OnUserReady {
 
@@ -58,29 +52,11 @@ public class UserActivity extends SivicoMenuActivity implements OnUserReady {
         TextView email = findViewById(R.id.user_email);
         email.setText(user.getEmail());
 
-        TextView neigh = findViewById(R.id.user_phone);
+        TextView neigh = findViewById(R.id.user_neighborhood);
         neigh.setText(user.getNeighborhood());
 
         final ImageView image = findViewById(R.id.user_photo);
-        Picasso.with(this)
-                .load(user.getPhoto())
-                .into(image, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        Bitmap source = ((BitmapDrawable) image.getDrawable()).getBitmap();
-                        RoundedBitmapDrawable drawable =
-                                RoundedBitmapDrawableFactory.create(UserActivity.this
-                                        .getResources(), source);
-                        drawable.setCircular(true);
-                        drawable.setCornerRadius(Math.max(source.getWidth() / 2.0f, source.getHeight() / 2.0f));
-                        image.setImageDrawable(drawable);
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                });
+        Utils.loadRoundPhoto(getApplicationContext(), image, getResources(), user.getPhoto());
         ProgressBar progressBar = findViewById(R.id.user_score_progress);
         progressBar.setProgress(user.getScore());
 

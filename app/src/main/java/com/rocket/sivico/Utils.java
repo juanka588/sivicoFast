@@ -1,7 +1,16 @@
 package com.rocket.sivico;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Environment;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,5 +76,43 @@ public class Utils {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         return imageFileName + ".jpg";
+    }
+
+    public static void loadRoundPhoto(Context context, final ImageView imageView, final Resources resources, File file) {
+        Picasso.with(context).load(file).fit().into(imageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                Bitmap source = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                RoundedBitmapDrawable drawable =
+                        RoundedBitmapDrawableFactory.create(resources, source);
+                drawable.setCircular(true);
+                drawable.setCornerRadius(Math.max(source.getWidth() / 2.0f, source.getHeight() / 2.0f));
+                imageView.setImageDrawable(drawable);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+    }
+
+    public static void loadRoundPhoto(Context context, final ImageView imageView, final Resources resources, String url) {
+        Picasso.with(context).load(url).fit().into(imageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                Bitmap source = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                RoundedBitmapDrawable drawable =
+                        RoundedBitmapDrawableFactory.create(resources, source);
+                drawable.setCircular(true);
+                drawable.setCornerRadius(Math.max(source.getWidth() / 2.0f, source.getHeight() / 2.0f));
+                imageView.setImageDrawable(drawable);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 }

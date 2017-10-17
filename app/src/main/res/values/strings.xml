@@ -131,4 +131,5 @@
     <string name="next">siguiente</string>
     <string name="title_activity_new_user">NewUserActivity</string>
     <string name="name">Nombre:</string>
+    <string name="please_select">Seleccione por favor</string>
 </resources>

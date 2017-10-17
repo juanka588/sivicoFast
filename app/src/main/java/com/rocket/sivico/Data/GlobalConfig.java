@@ -19,6 +19,7 @@ public class GlobalConfig {
     public static final String PARAM_CATEGORY = "category";
     private static final String TAG = GlobalConfig.class.getSimpleName();
     public static final String SIVICO_DIR = "sivico";
+    public static final String PARAM_USER = "user";
     public static DatabaseReference userRef;
 
 

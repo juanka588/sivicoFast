@@ -108,6 +108,7 @@ public class SivicoMenuActivity extends AppCompatActivity
     public void onNewUser(FirebaseUser user) {
         Intent intent = new Intent(this, NewUserActivity.class);
         startActivity(intent);
+        finish();
     }
 
     protected void loadActionBar() {
