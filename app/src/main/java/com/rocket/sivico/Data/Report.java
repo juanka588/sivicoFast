@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,8 @@ public class Report implements Parcelable {
     public Report() {
     }
 
-    public Report(String date, String description, String lat, String lon, String category, String owner, String color) {
+    public Report(String date, String description, String lat, String lon
+            , String category, String owner, String color) {
         this.date = date;
         this.description = description;
         this.lat = lat;
@@ -124,7 +126,26 @@ public class Report implements Parcelable {
         parcel.writeTypedList(evidencesList);
     }
 
+    public void addEvidence(String newEvidence) {
+        if (evidence == null) {
+            this.evidence = new HashMap<>();
+            this.evidence.put("img1", newEvidence);
+        } else {
+            int size = evidence.size();
+            this.evidence.put("img" + size, newEvidence);
+        }
+    }
+
     public Map<String, Object> toMap() {
-        return null;
+        Map<String, Object> mMap = new HashMap<>();
+        mMap.put("date", date);
+        mMap.put("description", description);
+        mMap.put("lat", lat);
+        mMap.put("lon", lon);
+        mMap.put("category", category);
+        mMap.put("owner", owner);
+        mMap.put("color", color);
+        mMap.put("evidence", evidence);
+        return mMap;
     }
 }

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,8 +48,13 @@ import com.rocket.sivico.R;
 import com.rocket.sivico.Utils;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.text.ParseException;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -73,6 +81,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
     private SivicoMenuActivity root;
     private StorageReference mImageRef;
     private SubCategory category;
+    private MapView mapView;
     private DatabaseReference mReportRef = FirebaseDatabase.getInstance().getReference("reports");
 
     public NewReportActivityFragment() {
@@ -93,20 +102,32 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
         if (imageUri != null) {
             displayPhoto();
         }
-        final MapView mapView = view.findViewById(R.id.mapView);
+        mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
 
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                mMap = googleMap;
-                MapsInitializer.initialize(getContext());
-                mMap.setMyLocationEnabled(true);
-                mMap.getUiSettings().setZoomControlsEnabled(true);
-                mapView.onResume();
+                initMap(googleMap);
             }
         });
         return view;
+    }
+
+    private void initMap(GoogleMap googleMap) {
+        mMap = googleMap;
+        if (getContext() != null) {
+            MapsInitializer.initialize(getContext());
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setZoomControlsEnabled(true);
+            mapView.onResume();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
     }
 
     private void associateCategory(SubCategory category, View view) {
@@ -171,8 +192,11 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-
-                                date.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                c.set(Calendar.YEAR, year);
+                                c.set(Calendar.MONTH, monthOfYear);
+                                c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                Date dateTime = c.getTime();
+                                date.setText(Utils.getFormatDate(dateTime.getTime() / 1000));
 
                             }
                         }, mYear, mMonth, mDay);
@@ -186,31 +210,33 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
             public void onClick(View view) {
                 if (imageUri != null) {
                     uploadPhoto(imageUri);
-                    String key = mReportRef.push().getKey();
-                    Report report = bindReportFromControls();
-                    mReportRef.getRef().child(key).updateChildren(report.toMap());
                 }
             }
         });
     }
 
     private Report bindReportFromControls() {
-        Date dateTime = new Date();
+        Date dateTime;
         try {
             dateTime = Utils.sivicoDateFormat.parse(date.getText().toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
+            String desc = description.getText().toString();
+            if (desc == null || desc.isEmpty()) {
+                desc = "Mi nuevo reporte de " + category.getName();
+            }
+            Report newReport = new Report(
+                    String.valueOf(dateTime.getTime() / 1000),
+                    desc,
+                    String.valueOf(root.userPos.latitude),
+                    String.valueOf(root.userPos.longitude),
+                    category.getName(),
+                    root.firebaseUser.getUid(),
+                    category.getColor()
+            );
+            return newReport;
+        } catch (Exception e) {
+            Log.e(TAG, e.toString(), e.fillInStackTrace());
+            return null;
         }
-        Report newReport = new Report(
-                String.valueOf(dateTime.getTime() / 1000),
-                description.getText().toString(),
-                String.valueOf(root.userPos.latitude),
-                String.valueOf(root.userPos.longitude),
-                category.getName(),
-                root.firebaseUser.getUid(),
-                category.getColor()
-        );
-        return newReport;
     }
 
 
@@ -236,6 +262,20 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
         File photo = new File(imageUri.getPath());
         Picasso.with(getActivity()).load(photo).into(preview);
         preview.setVisibility(View.VISIBLE);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        Bitmap bmp = BitmapFactory.decodeFile(photo.getAbsolutePath());
+        bmp.compress(Bitmap.CompressFormat.JPEG, 70, bos);
+        InputStream in = new ByteArrayInputStream(bos.toByteArray());
+        try {
+            byte[] buffer = new byte[in.available()];
+            in.read(buffer);
+            FileOutputStream out = new FileOutputStream(new File(imageUri.getPath()));
+            out.write(buffer);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -251,12 +291,24 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
         if (mMap == null) {
             root.located = false;
         }
-        root.handleNewLocation(location);
+        if (root.located) {
+            return;
+        }
+        root.located = true;
         if (mMap != null) {
             mMap.clear();
-            mMap.addMarker(new MarkerOptions().position(root.userPos).title("Sitio de la denuncia"));
+            MarkerOptions markerOptions = new MarkerOptions().position(root.userPos)
+                    .title("Sitio de la denuncia").snippet("Editar");
+            mMap.addMarker(markerOptions);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(root.userPos));
             mMap.moveCamera(CameraUpdateFactory.zoomTo(16));
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            });
         }
         Log.i(TAG, location.toString());
     }
@@ -274,12 +326,23 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         //noinspection LogConditional
-                        Log.d(TAG, "uploadPhoto:onSuccess:" +
-                                taskSnapshot.getMetadata().getReference().getPath());
+                        String path = taskSnapshot.getMetadata().getReference().getPath();
+                        Log.d(TAG, "uploadPhoto:onSuccess:" + path);
                         Toast.makeText(getContext(), "Image uploaded",
                                 Toast.LENGTH_SHORT).show();
 
                         showDownloadUI();
+                        String key = mReportRef.push().getKey();
+                        Report report = bindReportFromControls();
+                        if (report == null) {
+                            Log.e(TAG, "error binding report");
+                            return;
+                        }
+                        report.addEvidence(taskSnapshot.getDownloadUrl().toString());
+                        mReportRef.getRef().child(key).updateChildren(report.toMap());
+                        File photo = new File(imageUri.getPath());
+                        photo.delete();
+                        getActivity().finish();
                     }
                 })
                 .addOnFailureListener(getActivity(), new OnFailureListener() {

@@ -7,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -72,21 +71,6 @@ public class SivicoMenuActivity extends AppCompatActivity
     public HandleNewLocation locationCallback;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-        mGoogleClient = new GoogleApiClient.Builder(getApplicationContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        mLocReq = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)
-                .setFastestInterval(1 * 1000);
-        mGoogleClient.connect();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
@@ -147,6 +131,17 @@ public class SivicoMenuActivity extends AppCompatActivity
     }
 
     protected void loadActionBar() {
+        mGoogleClient = new GoogleApiClient.Builder(getApplicationContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mLocReq = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)
+                .setFastestInterval(1 * 1000);
+        mGoogleClient.connect();
+
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         image = navigationView.getHeaderView(0).findViewById(R.id.user_image_nav);
@@ -213,8 +208,6 @@ public class SivicoMenuActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-
-
     }
 
     public void signOut() {
@@ -231,6 +224,11 @@ public class SivicoMenuActivity extends AppCompatActivity
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -261,15 +259,13 @@ public class SivicoMenuActivity extends AppCompatActivity
     }
 
     public void handleNewLocation(Location location) {
-        if (located) {
-            return;
-        }
         Log.i(TAG, "New Location");
-        located = true;
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
         userPos = new LatLng(latitude, longitude);
-        locationCallback.handleNewLocation(location);
+        if (locationCallback != null) {
+            locationCallback.handleNewLocation(location);
+        }
     }
 
     @Override

@@ -36,6 +36,7 @@ public class User {
         this.score = score;
     }
 
+
     public int getScore() {
         return score;
     }
@@ -119,8 +120,6 @@ public class User {
         mMap.put("email", getEmail());
         mMap.put("photo", getPhoto());
         mMap.put("id_number", getIdNumber());
-        mMap.put("lat", 0);
-        mMap.put("lon", 0);
         mMap.put("points", getScore());
         return mMap;
     }

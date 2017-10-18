@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
+    android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="2dp"
-    card_view:cardElevation="5dp"
-    android:focusable="true">
+    card_view:cardElevation="5dp">
 
     <LinearLayout
-        android:id="@+id/category_background"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/item_select"
@@ -40,11 +40,12 @@
             android:text="Famlia y Cuidado" />
 
         <LinearLayout
+            android:id="@+id/category_background"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="end|right"
+            android:orientation="vertical"
             android:background="@android:color/darker_gray">
-
         </LinearLayout>
 
     </LinearLayout>
