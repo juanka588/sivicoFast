@@ -168,14 +168,17 @@ public class NewUserActivityFragment extends Fragment {
                 region.getText().toString(),
                 neighborhood.getText().toString(),
                 firebaseUser.getEmail(),
-                firebaseUser.getPhotoUrl().toString(),//check if new photo
+                firebaseUser.getPhotoUrl().toString(),//TODO: check if new photo
                 0
         );
         return newUser;
     }
 
     private void bindUser(FirebaseUser user) {
-        Utils.loadRoundPhoto(getContext(), userPhoto, getResources(), user.getPhotoUrl().toString());
+        Uri photoUrl = user.getPhotoUrl();
+        if (photoUrl != null) {
+            Utils.loadRoundPhoto(getContext(), userPhoto, getResources(), photoUrl.toString());
+        }
         userName.setText(user.getDisplayName());
         userPhone.setText(user.getPhoneNumber());
     }

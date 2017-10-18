@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,6 +62,7 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
         mAuth = FirebaseAuth.getInstance();
 
         mReportRef = FirebaseDatabase.getInstance().getReference().child("reports");
+        mReportRef.keepSynced(true);
         mManager = new LinearLayoutManager(this);
         reportList.setLayoutManager(mManager);
         reportList.setHasFixedSize(true);
@@ -122,6 +124,10 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
 
 
     protected FirebaseRecyclerAdapter<Report, ReportHolder> getAdapter() {
+        if (mAuth.getCurrentUser() == null) {
+            Toast.makeText(getApplicationContext(), getString(R.string.sign_out), Toast.LENGTH_LONG).show();
+            finish();
+        }
         String id = mAuth.getCurrentUser().getUid();
         Query query = mReportRef.orderByChild("owner").startAt(id).endAt(id);
         return new FirebaseRecyclerAdapter<Report, ReportHolder>(

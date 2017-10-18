@@ -25,7 +25,7 @@ public class GlobalConfig {
 
     public static void getUser(final FirebaseUser user, final OnUserReady callback) {
         userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
-
+        userRef.keepSynced(true);
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

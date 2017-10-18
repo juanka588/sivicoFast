@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         enterBtn = findViewById(R.id.enter_button);
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            //TODO : revalidate if user is well created
             startActivity(new Intent(this, ReportsActivity.class));
             finish();
         } else {
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(
                 AuthUI.getInstance().createSignInIntentBuilder()
                         .setTheme(AuthUI.getDefaultTheme())
-                        .setLogo(R.mipmap.ic_launcher)
+                        .setLogo(R.drawable.city)
                         .setAvailableProviders(getSelectedProviders())
                         .setTosUrl(FIREBASE_TOS_URL)
                         .setPrivacyPolicyUrl(FIREBASE_PRIVACY_POLICY_URL)
@@ -105,8 +104,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startSignedInActivity(IdpResponse response) {
-        Log.i(TAG, response.getEmail());
-        startActivity(new Intent(MainActivity.this, ReportsActivity.class));
+        if (response.getProviderType().equals(AuthUI.PHONE_VERIFICATION_PROVIDER)) {
+            startActivity(new Intent(MainActivity.this, ReportsActivity.class));
+        } else {
+            Log.i(TAG, response.getEmail());
+            startActivity(new Intent(MainActivity.this, ReportsActivity.class));
+        }
         finish();
     }
 
