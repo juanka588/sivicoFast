@@ -25,6 +25,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -65,6 +69,7 @@ import java.util.UUID;
 public class NewReportActivityFragment extends Fragment implements HandleNewLocation {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int PLACE_PICKER_REQUEST = 1003;
     private static final String TAG = NewReportActivityFragment.class.getSimpleName();
 
     ImageView preview;
@@ -220,10 +225,10 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
         try {
             dateTime = Utils.sivicoDateFormat.parse(date.getText().toString());
             String desc = description.getText().toString();
-            if (desc == null || desc.isEmpty()) {
+            if (desc.isEmpty()) {
                 desc = "Mi nuevo reporte de " + category.getName();
             }
-            Report newReport = new Report(
+            return new Report(
                     String.valueOf(dateTime.getTime() / 1000),
                     desc,
                     String.valueOf(root.userPos.latitude),
@@ -232,7 +237,6 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                     root.firebaseUser.getUid(),
                     category.getColor()
             );
-            return newReport;
         } catch (Exception e) {
             Log.e(TAG, e.toString(), e.fillInStackTrace());
             return null;
@@ -254,6 +258,15 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                         Log.e("Camera", e.toString());
                     }
                 }
+            case PLACE_PICKER_REQUEST:
+                if (resultCode == Activity.RESULT_OK) {
+                    Place place = PlacePicker.getPlace(data, getActivity());
+                    String toastMsg = String.format("Place: %s", place.getName());
+                    root.userPos = place.getLatLng();
+                    handleNewLocation(null);
+                    Toast.makeText(getContext(), toastMsg, Toast.LENGTH_LONG).show();
+                }
+                break;
         }
     }
 
@@ -305,13 +318,24 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
             mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    Toast.makeText(getContext(), marker.getTitle(), Toast.LENGTH_LONG).show();
+                    callPlacePicker();
                     return false;
                 }
             });
         }
-        Log.i(TAG, location.toString());
     }
+
+    private void callPlacePicker() {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            startActivityForResult(builder.build(getActivity()), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void uploadPhoto(Uri uri) {
         // Reset UI

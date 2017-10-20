@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.rocket.sivico.Data.Category;
 import com.rocket.sivico.R;
+import com.rocket.sivico.Utils;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by JuanCamilo on 11/10/2017.
@@ -31,10 +33,9 @@ public class CategoryHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Category category) {
-        this.title.setText(category.getName());
-        this.description.setText(category.getDescription());
-//            Picasso.with(this.cv.getContext()).load(category.getIcon()).into(this.image);
-
+        this.title.setText(Utils.formatString(category.getName()));
+        this.description.setText(Utils.formatString(category.getDescription()));
+        Picasso.with(this.cv.getContext()).load(category.getIcon()).into(this.image);
     }
 
 }

@@ -115,4 +115,11 @@ public class Utils {
             }
         });
     }
+
+    public static String formatString(String source) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(source.charAt(0));
+        sb.append(source.substring(1));
+        return sb.toString();
+    }
 }

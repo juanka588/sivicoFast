@@ -34,7 +34,7 @@ public class ReportHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Report report) {
-        this.title.setText(report.getDescription());
+        this.title.setText(Utils.formatString(report.getDescription()));
         this.date.setText(Utils.getFormatDate(Long.parseLong(report.getDate())));
         this.hour.setText(Utils.getHour(Long.parseLong(report.getDate())));
         this.image.setBackgroundColor(Color.parseColor(report.getColor()));

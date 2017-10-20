@@ -158,6 +158,13 @@ public class NewUserActivityFragment extends Fragment {
             return editedUser;
         }
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        Uri photoUrl = firebaseUser.getPhotoUrl();
+        String uri;
+        if (photoUrl == null) {
+            uri = "no-pic";
+        } else {
+            uri = photoUrl.toString();
+        }
         User newUser = new User(
                 firebaseUser.getUid(),
                 firebaseUser.getDisplayName(),//checks if name change
@@ -168,7 +175,7 @@ public class NewUserActivityFragment extends Fragment {
                 region.getText().toString(),
                 neighborhood.getText().toString(),
                 firebaseUser.getEmail(),
-                firebaseUser.getPhotoUrl().toString(),//TODO: check if new photo
+                uri,
                 0
         );
         return newUser;

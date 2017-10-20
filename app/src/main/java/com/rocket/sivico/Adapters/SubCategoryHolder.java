@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.rocket.sivico.Data.SubCategory;
 import com.rocket.sivico.R;
+import com.rocket.sivico.Utils;
 
 /**
  * Created by JuanCamilo on 11/10/2017.
@@ -29,8 +30,8 @@ public class SubCategoryHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(SubCategory subCategory, int position) {
-        this.title.setText(subCategory.getName());
-        this.number.setText(String.valueOf(position));
+        this.title.setText(Utils.formatString(subCategory.getName()));
+        this.number.setText(String.valueOf(position) + ".");
         ll.setBackgroundColor(Color.parseColor(subCategory.getColor()));
     }
 

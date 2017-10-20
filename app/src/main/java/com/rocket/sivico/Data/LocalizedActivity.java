@@ -14,6 +14,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.rocket.sivico.Interfaces.HandleNewLocation;
 
@@ -21,7 +22,8 @@ import com.rocket.sivico.Interfaces.HandleNewLocation;
  * Created by JuanCamilo on 18/10/2017.
  */
 
-public class LocalizedActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+public class LocalizedActivity extends AppCompatActivity
+        implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final String TAG = LocalizedActivity.class.getSimpleName();
     private GoogleApiClient mGoogleClient;
@@ -108,6 +110,9 @@ public class LocalizedActivity extends AppCompatActivity implements GoogleApiCli
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
+                .addApi(Places.GEO_DATA_API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .enableAutoManage(this, this)
                 .build();
         mLocReq = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)

@@ -22,6 +22,7 @@ public class Report implements Parcelable {
     private String category;
     private String owner;
     private String color;
+    private long score;
     private List<Evidence> evidencesList;
     private Map<String, Object> evidence;
 
@@ -47,6 +48,7 @@ public class Report implements Parcelable {
         category = in.readString();
         owner = in.readString();
         color = in.readString();
+        score = in.readLong();
         evidencesList = in.createTypedArrayList(Evidence.CREATOR);
     }
 
@@ -117,6 +119,7 @@ public class Report implements Parcelable {
         parcel.writeString(category);
         parcel.writeString(owner);
         parcel.writeString(color);
+        parcel.writeLong(score);
         if (getEvidence() != null) {
             evidencesList = new ArrayList<>();
             for (Map.Entry<String, Object> entry : getEvidence().entrySet()) {
@@ -145,7 +148,12 @@ public class Report implements Parcelable {
         mMap.put("category", category);
         mMap.put("owner", owner);
         mMap.put("color", color);
+        mMap.put("score", score);
         mMap.put("evidence", evidence);
         return mMap;
+    }
+
+    public long getScore() {
+        return score;
     }
 }

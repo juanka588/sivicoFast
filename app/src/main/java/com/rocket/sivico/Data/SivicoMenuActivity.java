@@ -6,6 +6,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -164,19 +165,23 @@ public class SivicoMenuActivity extends LocalizedActivity
 
     public void signOut() {
         currentUser = null;
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            startActivity(new Intent(SivicoMenuActivity.this, MainActivity.class));
-                            finish();
-                        } else {
-                            Log.e(TAG, "signOut failed");
+        try {
+            AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                startActivity(new Intent(SivicoMenuActivity.this, MainActivity.class));
+                                finish();
+                            } else {
+                                Log.e(TAG, "signOut failed");
+                            }
                         }
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            Log.e(TAG, e.toString(), e.fillInStackTrace());
+        }
     }
 
 }

@@ -22,6 +22,9 @@ public class GlobalConfig {
     public static final String PARAM_USER = "user";
     public static DatabaseReference userRef;
 
+    static {
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }
 
     public static void getUser(final FirebaseUser user, final OnUserReady callback) {
         userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());

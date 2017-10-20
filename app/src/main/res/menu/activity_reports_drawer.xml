@@ -16,7 +16,7 @@
             android:title="@string/my_user_data" />
         <item
             android:id="@+id/nav_sign_out"
-            android:icon="@drawable/com_facebook_button_login_logo"
+            android:icon="@drawable/ic_lock_outline"
             android:title="@string/sign_out" />
     </group>
 

@@ -14,7 +14,6 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 import com.rocket.sivico.R;
 
 import java.util.ArrayList;
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         enterBtn = findViewById(R.id.enter_button);
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             startActivity(new Intent(this, ReportsActivity.class));
             finish();
         } else {
@@ -127,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 //                        .setPermissions(getFacebookPermissions())
 //                        .build());
 
-//            selectedProviders.add(new AuthUI.IdpConfig.Builder(AuthUI.TWITTER_PROVIDER).build());
+//            selectedProviders.add(new AuthUI.IdpC♣onfig.Builder(AuthUI.TWITTER_PROVIDER).build());
 
         selectedProviders.add(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build());
 

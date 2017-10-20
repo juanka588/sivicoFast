@@ -1,6 +1,8 @@
 package com.rocket.sivico.GUI;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
@@ -52,6 +54,9 @@ public class DetailsActivityFragment extends Fragment {
         TextView date = inflate.findViewById(R.id.report_date);
         date.setText(Utils.getFormatDate(report.getDate()));
 
+        TextView score = inflate.findViewById(R.id.user_score_text);
+        score.setText(String.valueOf(report.getScore()));
+
         TextView description = inflate.findViewById(R.id.report_description);
         description.setText(report.getDescription());
 
@@ -62,12 +67,20 @@ public class DetailsActivityFragment extends Fragment {
                 .load(report.getEvidencesList().get(0).getImage())
                 .fit()
                 .into(image);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPhoto(Uri.parse(report.getEvidencesList().get(0).getImage()));
+            }
+        });
 
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
-                MapsInitializer.initialize(getContext());
+                if (getContext() != null) {
+                    MapsInitializer.initialize(getContext());
+                }
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setZoomControlsEnabled(true);
                 LatLng position = report.getLatLng();
@@ -83,5 +96,12 @@ public class DetailsActivityFragment extends Fragment {
         collapsingToolbarLayout = view.findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(getString(R.string.title_activity_details));
         collapsingToolbarLayout.setContentScrimColor(Color.parseColor(report.getColor()));
+    }
+
+    private void showPhoto(Uri photoUri) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(photoUri, "image/*");
+        startActivity(intent);
     }
 }
