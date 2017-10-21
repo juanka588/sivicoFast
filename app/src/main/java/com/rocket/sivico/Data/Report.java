@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.maps.android.clustering.ClusterItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +16,7 @@ import java.util.Map;
  * Created by JuanCamilo on 28/09/2017.
  */
 
-public class Report implements Parcelable {
+public class Report implements Parcelable, ClusterItem {
     private String date;
     private String description;
     private String lat;
@@ -29,6 +31,22 @@ public class Report implements Parcelable {
     public Report() {
     }
 
+    public Report(DataSnapshot dataSnapshot) {
+        this.date = (String) dataSnapshot.child("date").getValue();
+        this.description = (String) dataSnapshot.child("description").getValue();
+        this.lat = (String) dataSnapshot.child("lat").getValue();
+        this.lon = (String) dataSnapshot.child("lon").getValue();
+        this.category = (String) dataSnapshot.child("category").getValue();
+        this.owner = (String) dataSnapshot.child("owner").getValue();
+        this.color = (String) dataSnapshot.child("color").getValue();
+        if (dataSnapshot.child("score").getValue() == null) {
+            this.score = 0;
+        } else {
+            this.score = (Long) dataSnapshot.child("score").getValue();
+        }
+        this.evidence = (Map<String, Object>) dataSnapshot.child("evidence").getValue();
+    }
+
     public Report(String date, String description, String lat, String lon
             , String category, String owner, String color) {
         this.date = date;
@@ -40,7 +58,7 @@ public class Report implements Parcelable {
         this.color = color;
     }
 
-    protected Report(Parcel in) {
+    public Report(Parcel in) {
         date = in.readString();
         description = in.readString();
         lat = in.readString();
@@ -50,6 +68,12 @@ public class Report implements Parcelable {
         color = in.readString();
         score = in.readLong();
         evidencesList = in.createTypedArrayList(Evidence.CREATOR);
+        if (getEvidence() == null) {
+            this.evidence = new HashMap<>();
+            for (Evidence e : evidencesList) {
+                this.evidence.put(e.getKey(), e.getImage());
+            }
+        }
     }
 
     public static final Creator<Report> CREATOR = new Creator<Report>() {
@@ -98,11 +122,6 @@ public class Report implements Parcelable {
 
     public Map<String, Object> getEvidence() {
         return evidence;
-    }
-
-
-    public LatLng getLatLng() {
-        return new LatLng(Double.parseDouble(this.getLat()), Double.parseDouble(this.getLon()));
     }
 
     @Override
@@ -155,5 +174,10 @@ public class Report implements Parcelable {
 
     public long getScore() {
         return score;
+    }
+
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(Double.parseDouble(this.getLat()), Double.parseDouble(this.getLon()));
     }
 }

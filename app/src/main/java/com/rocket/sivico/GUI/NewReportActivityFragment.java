@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,11 +69,13 @@ import java.util.UUID;
  */
 public class NewReportActivityFragment extends Fragment implements HandleNewLocation {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 1001;
     static final int PLACE_PICKER_REQUEST = 1003;
+    private static final int EDIT_IMAGE_REQUEST = 1004;
     private static final String TAG = NewReportActivityFragment.class.getSimpleName();
 
-    ImageView preview;
+    private ImageView preview;
+    private FloatingActionButton edit;
     private Uri imageUri;
     private int mHour;
     private int mMinute;
@@ -99,6 +102,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
         hour = view.findViewById(R.id.report_hour);
         date = view.findViewById(R.id.report_date);
         description = view.findViewById(R.id.report_description);
+        edit = view.findViewById(R.id.edit_button);
         preview = view.findViewById(R.id.preview_image);
         Bundle bundle = getArguments();
         initControls(view);
@@ -218,6 +222,17 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                 }
             }
         });
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (imageUri != null) {
+                    editPhoto();
+                } else {
+                    Snackbar.make(view, "Toma una foto primero", Snackbar.LENGTH_LONG);
+                }
+            }
+        });
     }
 
     private Report bindReportFromControls() {
@@ -258,6 +273,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                         Log.e("Camera", e.toString());
                     }
                 }
+                break;
             case PLACE_PICKER_REQUEST:
                 if (resultCode == Activity.RESULT_OK) {
                     Place place = PlacePicker.getPlace(data, getActivity());
@@ -265,6 +281,17 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                     root.userPos = place.getLatLng();
                     handleNewLocation(null);
                     Toast.makeText(getContext(), toastMsg, Toast.LENGTH_LONG).show();
+                }
+                break;
+            case EDIT_IMAGE_REQUEST:
+                if (resultCode == Activity.RESULT_OK) {
+                    try {
+                        displayPhoto();
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), "Failed to load", Toast.LENGTH_SHORT)
+                                .show();
+                        Log.e("Camera", e.toString());
+                    }
                 }
                 break;
         }
@@ -277,7 +304,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
         preview.setVisibility(View.VISIBLE);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         Bitmap bmp = BitmapFactory.decodeFile(photo.getAbsolutePath());
-        bmp.compress(Bitmap.CompressFormat.JPEG, 70, bos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, bos);
         InputStream in = new ByteArrayInputStream(bos.toByteArray());
         try {
             byte[] buffer = new byte[in.available()];
@@ -289,6 +316,13 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void editPhoto() {
+        Intent editIntent = new Intent(Intent.ACTION_EDIT);
+        editIntent.setDataAndType(imageUri, "image/*");
+        editIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(Intent.createChooser(editIntent, null), EDIT_IMAGE_REQUEST);
     }
 
     @Override
@@ -366,6 +400,8 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                         mReportRef.getRef().child(key).updateChildren(report.toMap());
                         File photo = new File(imageUri.getPath());
                         photo.delete();
+                        Intent resultIntent = new Intent(getActivity(), CategoryActivity.class);
+                        getActivity().setResult(Activity.RESULT_OK, resultIntent);
                         getActivity().finish();
                     }
                 })

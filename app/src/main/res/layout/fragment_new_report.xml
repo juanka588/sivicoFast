@@ -46,8 +46,16 @@
                 android:layout_width="300dp"
                 android:layout_height="300dp"
                 android:layout_gravity="center"
-                android:contentDescription="@string/preview_image"
-                android:visibility="gone" />
+                android:background="@android:drawable/ic_menu_camera"
+                android:contentDescription="@string/preview_image" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/edit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_margin="@dimen/fab_margin"
+                app:srcCompat="@android:drawable/ic_menu_edit" />
 
             <TextView
                 style="@style/textTitle"
@@ -146,7 +154,6 @@
                 android:layout_gravity="right"
                 android:layout_margin="@dimen/fab_margin"
                 app:srcCompat="@android:drawable/ic_menu_save" />
-
         </LinearLayout>
     </ScrollView>
 

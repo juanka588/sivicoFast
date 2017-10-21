@@ -1,5 +1,6 @@
 package com.rocket.sivico.GUI;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import com.rocket.sivico.R;
 public class CategoryActivityFragment extends Fragment implements OnCategoryClick {
 
     private static final String TAG = CategoryActivityFragment.class.getSimpleName();
+    private static final int CREATE_REPORT_REQUEST = 2003;
     private RecyclerView children;
     private View rootView;
     private DatabaseReference catRef = FirebaseDatabase.getInstance().getReference("categories");
@@ -95,7 +97,7 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
                     public void onClick(View view) {
                         Intent intent = new Intent(getActivity(), NewReportActivity.class);
                         intent.putExtra(GlobalConfig.PARAM_CATEGORY, subCategory);
-                        startActivity(intent);
+                        startActivityForResult(intent, CREATE_REPORT_REQUEST);
                     }
                 });
             }
@@ -134,5 +136,15 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
 //                mEmptyListMessage.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
             }
         };
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CREATE_REPORT_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                this.getActivity().finish();
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -33,6 +36,7 @@ public class DetailsActivityFragment extends Fragment {
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private GoogleMap mMap;
     private MapView mapView;
+    private FloatingActionButton fab;
 
     public DetailsActivityFragment() {
     }
@@ -47,6 +51,17 @@ public class DetailsActivityFragment extends Fragment {
         mapView.onCreate(savedInstanceState);
         bindReportData(inflate, report);
         manageToolbar(inflate, report);
+        fab = inflate.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareLinkContent content = new ShareLinkContent.Builder()
+                        .setContentUrl(Uri.parse("https://developers.facebook.com"))
+                        .build();
+                ShareDialog shareDialog = new ShareDialog(DetailsActivityFragment.this);
+                shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
+            }
+        });
         return inflate;
     }
 
@@ -65,7 +80,6 @@ public class DetailsActivityFragment extends Fragment {
         ImageView image = inflate.findViewById(R.id.report_image);
         Picasso.with(getContext())
                 .load(report.getEvidencesList().get(0).getImage())
-                .fit()
                 .into(image);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +97,7 @@ public class DetailsActivityFragment extends Fragment {
                 }
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setZoomControlsEnabled(true);
-                LatLng position = report.getLatLng();
+                LatLng position = report.getPosition();
                 mMap.addMarker(new MarkerOptions().position(position).title("Sitio de la denuncia"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
                 mMap.moveCamera(CameraUpdateFactory.zoomTo(16));

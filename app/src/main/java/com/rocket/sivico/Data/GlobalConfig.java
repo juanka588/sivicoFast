@@ -23,7 +23,12 @@ public class GlobalConfig {
     public static DatabaseReference userRef;
 
     static {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        try {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        } catch (Exception e) {
+            Log.e(TAG, e.toString(), e.fillInStackTrace());
+        }
+
     }
 
     public static void getUser(final FirebaseUser user, final OnUserReady callback) {

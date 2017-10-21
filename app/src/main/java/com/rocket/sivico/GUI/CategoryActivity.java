@@ -1,5 +1,6 @@
 package com.rocket.sivico.GUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -13,4 +14,8 @@ public class CategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

@@ -6,7 +6,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.rocket.sivico.GUI.CategoryActivity;
 import com.rocket.sivico.GUI.MainActivity;
+import com.rocket.sivico.GUI.MapsActivity;
 import com.rocket.sivico.GUI.NewUserActivity;
 import com.rocket.sivico.GUI.ReportsActivity;
 import com.rocket.sivico.GUI.UserActivity;
@@ -133,6 +133,9 @@ public class SivicoMenuActivity extends LocalizedActivity
         switch (id) {
             case R.id.nav_new_report:
                 intent = new Intent(this, CategoryActivity.class);
+                break;
+            case R.id.nav_maps:
+                intent = new Intent(this, MapsActivity.class);
                 break;
             case R.id.nav_my_reports:
                 intent = new Intent(this, ReportsActivity.class);

@@ -1,5 +1,7 @@
 package com.rocket.sivico.GUI;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 
@@ -18,5 +20,13 @@ public class NewReportActivity extends SivicoMenuActivity {
         fragment.setArguments(getIntent().getExtras());
         fragmentTransaction.replace(R.id.container, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent resultIntent = new Intent(this, CategoryActivity.class);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
     }
 }
