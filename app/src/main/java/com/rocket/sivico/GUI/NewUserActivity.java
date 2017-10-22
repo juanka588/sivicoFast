@@ -2,6 +2,7 @@ package com.rocket.sivico.GUI;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -18,6 +19,8 @@ public class NewUserActivity extends LocalizedActivity implements OnEditUser {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_user);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         initLocalization();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         NewUserActivityFragment fragment = new NewUserActivityFragment();

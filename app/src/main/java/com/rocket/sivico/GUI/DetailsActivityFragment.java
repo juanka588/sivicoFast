@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,7 +47,7 @@ public class DetailsActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_details, container, false);
         Bundle bundle = getArguments();
-        Report report = bundle.getParcelable(GlobalConfig.PARAM_REPORT);
+        final Report report = bundle.getParcelable(GlobalConfig.PARAM_REPORT);
         mapView = inflate.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         bindReportData(inflate, report);
@@ -56,7 +57,11 @@ public class DetailsActivityFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ShareLinkContent content = new ShareLinkContent.Builder()
-                        .setContentUrl(Uri.parse("https://developers.facebook.com"))
+                        .setContentUrl(Uri.parse(report.getEvidence().get("img1").toString()))
+                        .setQuote(report.getDescription())
+                        .setShareHashtag(new ShareHashtag.Builder()
+                                .setHashtag("#sivicoReports")
+                                .build())
                         .build();
                 ShareDialog shareDialog = new ShareDialog(DetailsActivityFragment.this);
                 shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);

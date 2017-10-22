@@ -1,7 +1,10 @@
 package com.rocket.sivico.GUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,7 +26,15 @@ public class UserActivity extends SivicoMenuActivity implements OnUserReady {
         setContentView(R.layout.activity_user);
         loadActionBar();
         manageToolbar();
-        GlobalConfig.getUser(firebaseUser, this);
+        FloatingActionButton fab = findViewById(R.id.edit_button);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UserActivity.this, NewUserActivity.class);
+                intent.putExtra(GlobalConfig.PARAM_USER, currentUser);
+                startActivity(intent);
+            }
+        });
     }
 
     private void bindUserData(User user) {

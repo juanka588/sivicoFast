@@ -1,6 +1,5 @@
 package com.rocket.sivico.Adapters;
 
-import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -32,7 +31,6 @@ public class SubCategoryHolder extends RecyclerView.ViewHolder {
     public void bind(SubCategory subCategory, int position) {
         this.title.setText(Utils.formatString(subCategory.getName()));
         this.number.setText(String.valueOf(position) + ".");
-        ll.setBackgroundColor(Color.parseColor(subCategory.getColor()));
     }
 
 }

@@ -1,5 +1,8 @@
 package com.rocket.sivico.Data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,7 +10,7 @@ import java.util.Map;
  * Created by JuanCamilo on 28/09/2017.
  */
 
-public class User {
+public class User implements Parcelable {
     private String id;
     private String name;
     private String idNumber;
@@ -36,6 +39,32 @@ public class User {
         this.score = score;
     }
 
+
+    protected User(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        idNumber = in.readString();
+        gender = in.readByte() != 0;
+        birthday = in.readString();
+        phone = in.readString();
+        region = in.readString();
+        neighborhood = in.readString();
+        email = in.readString();
+        photo = in.readString();
+        score = in.readInt();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public int getScore() {
         return score;
@@ -122,5 +151,25 @@ public class User {
         mMap.put("id_number", getIdNumber());
         mMap.put("points", getScore());
         return mMap;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(name);
+        parcel.writeString(idNumber);
+        parcel.writeByte((byte) (gender ? 1 : 0));
+        parcel.writeString(birthday);
+        parcel.writeString(phone);
+        parcel.writeString(region);
+        parcel.writeString(neighborhood);
+        parcel.writeString(email);
+        parcel.writeString(photo);
+        parcel.writeInt(score);
     }
 }

@@ -92,7 +92,10 @@ public class MapsActivity extends SivicoMenuActivity implements OnMapReadyCallba
     @Override
     public void handleNewLocation(Location location) {
         super.handleNewLocation(location);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(userPos));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+        if (!located) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(userPos));
+            mMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+        }
+        located = true;
     }
 }
