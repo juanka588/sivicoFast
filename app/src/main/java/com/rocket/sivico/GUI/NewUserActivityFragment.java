@@ -17,7 +17,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +49,7 @@ public class NewUserActivityFragment extends Fragment {
     private Button userNewPic;
     private Button userNewBirthDay;
     private TextView userBirthday;
-    private Spinner gender;
+    private RadioGroup gender;
     private EditText region;
     private EditText neighborhood;
     private OnEditUser callback;
@@ -58,6 +59,7 @@ public class NewUserActivityFragment extends Fragment {
     private int mYear;
     private int mMonth;
     private int mDay;
+    private boolean genderSelected;
 
     public NewUserActivityFragment() {
     }
@@ -86,13 +88,19 @@ public class NewUserActivityFragment extends Fragment {
         userName = view.findViewById(R.id.user_name);
         userBirthday = view.findViewById(R.id.user_birthday);
         userNewBirthDay = view.findViewById(R.id.select_date);
-        gender = view.findViewById(R.id.user_gender_select);
+        gender = view.findViewById(R.id.user_gender_group);
         userIdNumber = view.findViewById(R.id.user_id_number);
         userPhone = view.findViewById(R.id.user_phone);
         region = view.findViewById(R.id.user_region);
         neighborhood = view.findViewById(R.id.user_neighborhood);
         saveUser = view.findViewById(R.id.fab);
 
+        gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                genderSelected = i == R.id.male;
+            }
+        });
         userNewPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,7 +158,7 @@ public class NewUserActivityFragment extends Fragment {
         if (editedUser != null) {
             editedUser.setName(userName.getText().toString());
             editedUser.setIdNumber(userIdNumber.getText().toString());
-            editedUser.setGender(gender.getSelectedItemPosition() == 0);
+            editedUser.setGender(genderSelected);
             editedUser.setBirthday(String.valueOf(date.getTime() / 1000));
             editedUser.setPhone(userPhone.getText().toString());
             editedUser.setRegion(region.getText().toString());
@@ -169,7 +177,7 @@ public class NewUserActivityFragment extends Fragment {
                 firebaseUser.getUid(),
                 firebaseUser.getDisplayName(),//checks if name change
                 userIdNumber.getText().toString(),
-                gender.getSelectedItemPosition() == 0,
+                genderSelected,
                 String.valueOf(date.getTime() / 1000),
                 userPhone.getText().toString(),
                 region.getText().toString(),
@@ -194,7 +202,11 @@ public class NewUserActivityFragment extends Fragment {
         Utils.loadRoundPhoto(getContext(), userPhoto, getResources(), user.getPhoto());
         userName.setText(user.getName());
         userBirthday.setText(Utils.getFormatDate(user.getBirthday()));
-        gender.setSelection(user.isGender() ? 0 : 1);
+        RadioButton rb = getActivity().findViewById(R.id.female);
+        if (user.isGender()) {
+            rb = getActivity().findViewById(R.id.male);
+        }
+        rb.setSelected(true);
         userIdNumber.setText(user.getIdNumber());
         userPhone.setText(user.getPhone());
         region.setText(user.getRegion());

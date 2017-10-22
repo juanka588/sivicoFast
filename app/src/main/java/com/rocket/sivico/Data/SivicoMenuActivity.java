@@ -24,6 +24,7 @@ import com.rocket.sivico.GUI.MainActivity;
 import com.rocket.sivico.GUI.MapsActivity;
 import com.rocket.sivico.GUI.NewUserActivity;
 import com.rocket.sivico.GUI.ReportsActivity;
+import com.rocket.sivico.GUI.ScoreActivity;
 import com.rocket.sivico.GUI.UserActivity;
 import com.rocket.sivico.Interfaces.OnUserReady;
 import com.rocket.sivico.R;
@@ -146,6 +147,9 @@ public class SivicoMenuActivity extends LocalizedActivity
             case R.id.nav_sign_out:
                 signOut();
                 return true;
+            case R.id.nav_scoreboard:
+                intent = new Intent(this, ScoreActivity.class);
+                break;
             default:
                 intent = new Intent(this, ReportsActivity.class);
         }

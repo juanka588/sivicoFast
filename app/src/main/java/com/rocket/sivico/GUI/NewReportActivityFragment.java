@@ -73,18 +73,27 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
     static final int PLACE_PICKER_REQUEST = 1003;
     private static final int EDIT_IMAGE_REQUEST = 1004;
     private static final String TAG = NewReportActivityFragment.class.getSimpleName();
+    private static final String IMAGE_URI = "image_uri";
+    private static final String DESCRIPTION = "description";
+    private static final String DATE = "date";
+    private static final String HOUR = "hour";
 
     private ImageView preview;
     private FloatingActionButton edit;
+    private TextView hourTx;
+    private TextView dateTx;
+    private TextView descriptionTx;
+
     private Uri imageUri;
+    private String description;
+    private String date;
+    private String hour;
     private int mHour;
     private int mMinute;
-    private TextView hour;
-    private TextView date;
-    private TextView description;
     private int mYear;
     private int mMonth;
     private int mDay;
+
     private GoogleMap mMap;
     private SivicoMenuActivity root;
     private StorageReference mImageRef;
@@ -99,15 +108,25 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_report, container, false);
-        hour = view.findViewById(R.id.report_hour);
-        date = view.findViewById(R.id.report_date);
-        description = view.findViewById(R.id.report_description);
+        hourTx = view.findViewById(R.id.report_hour);
+        dateTx = view.findViewById(R.id.report_date);
+        descriptionTx = view.findViewById(R.id.report_description);
         edit = view.findViewById(R.id.edit_button);
         preview = view.findViewById(R.id.preview_image);
         Bundle bundle = getArguments();
         initControls(view);
         category = bundle.getParcelable(GlobalConfig.PARAM_CATEGORY);
         associateCategory(category, view);
+        if (savedInstanceState != null) {
+            imageUri = savedInstanceState.getParcelable(IMAGE_URI);
+            description = savedInstanceState.getString(DESCRIPTION);
+            date = savedInstanceState.getString(DATE);
+            hour = savedInstanceState.getString(HOUR);
+
+            dateTx.setText(date);
+            hourTx.setText(hour);
+            descriptionTx.setText(description);
+        }
         if (imageUri != null) {
             displayPhoto();
         }
@@ -137,6 +156,18 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
     public void onResume() {
         super.onResume();
         mapView.onResume();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(IMAGE_URI, imageUri);
+        description = descriptionTx.getText().toString();
+        outState.putString(DESCRIPTION, description);
+        date = dateTx.getText().toString();
+        outState.putString(DATE, date);
+        hour = hourTx.getText().toString();
+        outState.putString(HOUR, hour);
     }
 
     private void associateCategory(SubCategory category, View view) {
@@ -176,8 +207,9 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay,
                                                   int minute) {
-
-                                hour.setText(hourOfDay + ":" + minute + " " + (c.get(Calendar.AM_PM) == 0 ? "AM" : "PM"));
+                                c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                c.set(Calendar.MINUTE, minute);
+                                hourTx.setText(Utils.getHour(c.getTime().getTime() / 1000));
                             }
                         }, mHour, mMinute, false);
                 timePickerDialog.show();
@@ -205,7 +237,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                                 c.set(Calendar.MONTH, monthOfYear);
                                 c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                                 Date dateTime = c.getTime();
-                                date.setText(Utils.getFormatDate(dateTime.getTime() / 1000));
+                                dateTx.setText(Utils.getFormatDate(dateTime.getTime() / 1000));
 
                             }
                         }, mYear, mMonth, mDay);
@@ -219,6 +251,8 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
             public void onClick(View view) {
                 if (imageUri != null) {
                     uploadPhoto(imageUri);
+                } else {
+                    Snackbar.make(view, getString(R.string.please_take_picture), Snackbar.LENGTH_LONG);
                 }
             }
         });
@@ -229,7 +263,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                 if (imageUri != null) {
                     editPhoto();
                 } else {
-                    Snackbar.make(view, "Toma una foto primero", Snackbar.LENGTH_LONG);
+                    Snackbar.make(view, getString(R.string.please_take_picture), Snackbar.LENGTH_LONG);
                 }
             }
         });
@@ -238,8 +272,10 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
     private Report bindReportFromControls() {
         Date dateTime;
         try {
-            dateTime = Utils.sivicoDateFormat.parse(date.getText().toString());
-            String desc = description.getText().toString();
+            dateTime = Utils.sivicoDateAndHourFormat.parse(dateTx.getText().toString()
+                    + " "
+                    + hourTx.getText().toString());
+            String desc = descriptionTx.getText().toString();
             if (desc.isEmpty()) {
                 desc = "Mi nuevo reporte de " + category.getName();
             }
@@ -279,6 +315,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                     Place place = PlacePicker.getPlace(data, getActivity());
                     String toastMsg = String.format("Place: %s", place.getName());
                     root.userPos = place.getLatLng();
+                    root.located = false;
                     handleNewLocation(null);
                     Toast.makeText(getContext(), toastMsg, Toast.LENGTH_LONG).show();
                 }
@@ -300,7 +337,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
 
     private void displayPhoto() {
         File photo = new File(imageUri.getPath());
-        Picasso.with(getActivity()).load(photo).into(preview);
+        Picasso.with(getActivity()).load(photo).fit().into(preview);
         preview.setVisibility(View.VISIBLE);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         Bitmap bmp = BitmapFactory.decodeFile(photo.getAbsolutePath());

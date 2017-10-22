@@ -25,7 +25,8 @@ import java.util.Locale;
 
 public class Utils {
     public static SimpleDateFormat sivicoDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-    public static SimpleDateFormat sivicoHourFormat = new SimpleDateFormat("hh:mm:ss a", Locale.getDefault());
+    public static SimpleDateFormat sivicoDateAndHourFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm a", Locale.getDefault());
+    public static SimpleDateFormat sivicoHourFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
     public static SimpleDateFormat sivicoAge = new SimpleDateFormat("yyyy", Locale.getDefault());
 
     public static String getHour(String timestamp) {

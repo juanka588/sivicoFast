@@ -23,11 +23,11 @@
 
         <ImageView
             android:id="@+id/preview_image"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_gravity="center"
             android:contentDescription="@string/preview_image"
-            app:srcCompat="@drawable/ic_camera" />
+            app:srcCompat="@drawable/ic_menu_camera" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/edit_button"

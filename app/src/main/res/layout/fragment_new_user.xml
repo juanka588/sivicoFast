@@ -22,9 +22,9 @@
                 android:id="@+id/user_photo"
                 android:layout_width="180dp"
                 android:layout_height="180dp"
-                android:contentDescription="@string/preview_image"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/city" />
+                android:contentDescription="@string/preview_image"
+                android:src="@drawable/city_side" />
 
             <Button
                 android:id="@+id/take_user_photo"
@@ -36,6 +36,7 @@
         </LinearLayout>
 
         <TextView
+            style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/name" />
@@ -49,6 +50,7 @@
             android:text="" />
 
         <TextView
+            style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/birthday" />
@@ -64,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:text="15/06/2017" />
+                android:text="15-06-2017" />
 
             <Button
                 android:id="@+id/select_date"
@@ -75,18 +77,36 @@
         </LinearLayout>
 
         <TextView
+            style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/gender" />
 
-        <Spinner
-            android:id="@+id/user_gender_select"
+        <RadioGroup
+            android:id="@+id/user_gender_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/spinnerGender"
-            android:prompt="@string/please_select" />
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <RadioButton
+                android:id="@+id/male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/male" />
+
+            <RadioButton
+                android:id="@+id/female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/female" />
+        </RadioGroup>
 
         <TextView
+            style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/id_number" />
@@ -99,6 +119,7 @@
             android:inputType="number" />
 
         <TextView
+            style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/phone" />
@@ -111,6 +132,7 @@
             android:inputType="phone" />
 
         <TextView
+            style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/region" />
@@ -124,6 +146,7 @@
             android:text="" />
 
         <TextView
+            style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/neighborhood" />
@@ -142,6 +165,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@android:drawable/ic_menu_send" />
+            app:srcCompat="@android:drawable/ic_menu_save" />
     </LinearLayout>
 </ScrollView>

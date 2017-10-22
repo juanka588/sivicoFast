@@ -26,8 +26,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:contentDescription="@string/report_image"
-                android:scaleType="center"
-                android:src="@drawable/city" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/city_side" />
 
 
             <TextView
@@ -124,16 +124,6 @@
                 app:layout_scrollFlags="scroll|enterAlways">
 
             </android.support.v7.widget.Toolbar>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/fab_margin"
-                app:layout_collapseMode="pin"
-                app:srcCompat="@android:drawable/ic_menu_share" />
-
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>

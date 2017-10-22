@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.share.model.ShareHashtag;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -37,7 +33,6 @@ public class DetailsActivityFragment extends Fragment {
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private GoogleMap mMap;
     private MapView mapView;
-    private FloatingActionButton fab;
 
     public DetailsActivityFragment() {
     }
@@ -52,21 +47,6 @@ public class DetailsActivityFragment extends Fragment {
         mapView.onCreate(savedInstanceState);
         bindReportData(inflate, report);
         manageToolbar(inflate, report);
-        fab = inflate.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ShareLinkContent content = new ShareLinkContent.Builder()
-                        .setContentUrl(Uri.parse(report.getEvidence().get("img1").toString()))
-                        .setQuote(report.getDescription())
-                        .setShareHashtag(new ShareHashtag.Builder()
-                                .setHashtag("#sivicoReports")
-                                .build())
-                        .build();
-                ShareDialog shareDialog = new ShareDialog(DetailsActivityFragment.this);
-                shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
-            }
-        });
         return inflate;
     }
 
