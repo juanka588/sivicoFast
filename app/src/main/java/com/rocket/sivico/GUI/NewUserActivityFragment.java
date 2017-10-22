@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,8 +23,13 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.rocket.sivico.Data.GlobalConfig;
 import com.rocket.sivico.Data.User;
 import com.rocket.sivico.Interfaces.OnEditUser;
@@ -34,6 +40,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -50,10 +57,13 @@ public class NewUserActivityFragment extends Fragment {
     private Button userNewBirthDay;
     private TextView userBirthday;
     private RadioGroup gender;
+    private RadioButton maleRB;
+    private RadioButton femaleRB;
     private EditText region;
     private EditText neighborhood;
     private OnEditUser callback;
     private FloatingActionButton saveUser;
+    private StorageReference mImageRef;
     private Uri imageUri;
     private User editedUser;
     private int mYear;
@@ -78,6 +88,7 @@ public class NewUserActivityFragment extends Fragment {
         } catch (Exception e) {
             editedUser = null;
             bindUser(FirebaseAuth.getInstance().getCurrentUser());
+            Log.e(TAG, e.toString(), e.fillInStackTrace());
         }
         return view;
     }
@@ -94,7 +105,8 @@ public class NewUserActivityFragment extends Fragment {
         region = view.findViewById(R.id.user_region);
         neighborhood = view.findViewById(R.id.user_neighborhood);
         saveUser = view.findViewById(R.id.fab);
-
+        maleRB = view.findViewById(R.id.male);
+        femaleRB = view.findViewById(R.id.female);
         gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -142,13 +154,12 @@ public class NewUserActivityFragment extends Fragment {
         saveUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                User user = bindFromControls();
-                callback.onEditUser(user);
+                bindFromControls(callback);
             }
         });
     }
 
-    private User bindFromControls() {
+    private void bindFromControls(OnEditUser callback) {
         Date date = new Date();
         try {
             date = Utils.sivicoDateFormat.parse(userBirthday.getText().toString());
@@ -163,13 +174,14 @@ public class NewUserActivityFragment extends Fragment {
             editedUser.setPhone(userPhone.getText().toString());
             editedUser.setRegion(region.getText().toString());
             editedUser.setNeighborhood(neighborhood.getText().toString());
-            return editedUser;
+            callback.onEditUser(editedUser);
         }
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         Uri photoUrl = firebaseUser.getPhotoUrl();
         String uri;
         if (photoUrl == null) {
             uri = "no-pic";
+
         } else {
             uri = photoUrl.toString();
         }
@@ -186,7 +198,40 @@ public class NewUserActivityFragment extends Fragment {
                 uri,
                 0
         );
-        return newUser;
+        if (newUser.getPhoto().equals("no-pic")) {
+            if (imageUri != null) {
+                uploadPhoto(callback, newUser);
+            }
+        } else {
+            callback.onEditUser(newUser);
+        }
+    }
+
+    private void uploadPhoto(final OnEditUser callback, final User newUser) {
+        String uuid = UUID.randomUUID().toString();
+        mImageRef = FirebaseStorage.getInstance().getReference(uuid);
+        mImageRef.putFile(imageUri)
+                .addOnSuccessListener(getActivity(), new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        //noinspection LogConditional
+                        String path = taskSnapshot.getMetadata().getReference().getPath();
+                        Log.d(TAG, "uploadPhoto:onSuccess:" + path);
+                        Toast.makeText(getContext(), "Image uploaded",
+                                Toast.LENGTH_SHORT).show();
+
+                        newUser.setPhoto(taskSnapshot.getDownloadUrl().toString());
+                        callback.onEditUser(newUser);
+                    }
+                })
+                .addOnFailureListener(getActivity(), new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "uploadPhoto:onError", e);
+                        Toast.makeText(getContext(), "Upload failed",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void bindUser(FirebaseUser user) {
@@ -202,9 +247,9 @@ public class NewUserActivityFragment extends Fragment {
         Utils.loadRoundPhoto(getContext(), userPhoto, getResources(), user.getPhoto());
         userName.setText(user.getName());
         userBirthday.setText(Utils.getFormatDate(user.getBirthday()));
-        RadioButton rb = getActivity().findViewById(R.id.female);
+        RadioButton rb = femaleRB;
         if (user.isGender()) {
-            rb = getActivity().findViewById(R.id.male);
+            rb = maleRB;
         }
         rb.setSelected(true);
         userIdNumber.setText(user.getIdNumber());

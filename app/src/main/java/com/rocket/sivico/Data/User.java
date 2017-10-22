@@ -66,6 +66,14 @@ public class User implements Parcelable {
         }
     };
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
     public int getScore() {
         return score;
     }

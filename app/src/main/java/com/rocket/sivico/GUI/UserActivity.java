@@ -48,7 +48,7 @@ public class UserActivity extends SivicoMenuActivity implements OnUserReady {
         idNumber.setText(user.getIdNumber());
 
         TextView gender = findViewById(R.id.user_gender);
-        gender.setText(user.isGender() ? "Masculino" : "Femenino");
+        gender.setText(user.isGender() ? getString(R.string.male) : getString(R.string.female));
 
         TextView age = findViewById(R.id.user_age);
         age.setText(Utils.getAge(user.getBirthday()));
