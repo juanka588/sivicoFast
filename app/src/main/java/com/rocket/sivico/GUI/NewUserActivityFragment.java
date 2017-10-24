@@ -148,6 +148,7 @@ public class NewUserActivityFragment extends Fragment {
                                 userBirthday.setText(Utils.getFormatDate(date.getTime() / 1000));
                             }
                         }, mYear, mMonth, mDay);
+                datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 datePickerDialog.show();
             }
         });

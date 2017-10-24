@@ -35,6 +35,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -93,6 +94,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
     private int mYear;
     private int mMonth;
     private int mDay;
+    private LatLng newPos;
 
     private GoogleMap mMap;
     private SivicoMenuActivity root;
@@ -279,11 +281,17 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
             if (desc.isEmpty()) {
                 desc = "Mi nuevo reporte de " + category.getName();
             }
+            String lat = String.valueOf(root.userPos.latitude);
+            String lon = String.valueOf(root.userPos.longitude);
+            if (newPos != null) {
+                lat = String.valueOf(newPos.latitude);
+                lon = String.valueOf(newPos.longitude);
+            }
             return new Report(
                     String.valueOf(dateTime.getTime() / 1000),
                     desc,
-                    String.valueOf(root.userPos.latitude),
-                    String.valueOf(root.userPos.longitude),
+                    lat,
+                    lon,
                     category.getName(),
                     root.firebaseUser.getUid(),
                     category.getColor()
@@ -316,6 +324,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                     String toastMsg = String.format("Place: %s", place.getName());
                     root.userPos = place.getLatLng();
                     root.located = false;
+                    newPos = place.getLatLng();
                     handleNewLocation(null);
                     Toast.makeText(getContext(), toastMsg, Toast.LENGTH_LONG).show();
                 }

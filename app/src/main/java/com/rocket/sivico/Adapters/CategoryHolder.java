@@ -22,8 +22,8 @@ public class CategoryHolder extends RecyclerView.ViewHolder {
     LinearLayout ll;
     TextView title;
     TextView description;
-    Button next;
-    Button prev;
+    public Button next;
+    public Button prev;
     ImageView image;
 
     CategoryHolder(View itemView) {

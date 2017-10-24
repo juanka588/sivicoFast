@@ -120,12 +120,28 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
                 query,
                 this) {
             @Override
-            public void populateViewHolder(CategoryHolder holder, final Category category, int position) {
+            public void populateViewHolder(CategoryHolder holder, final Category category, final int position) {
                 holder.bind(category);
                 holder.cv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         CategoryActivityFragment.this.onCategoryClick(category);
+                    }
+                });
+                holder.next.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        layoutManagerMain.smoothScrollToPosition(mainCategoryList, null, position + 1);
+                    }
+                });
+                holder.prev.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (position - 1 < 0) {
+                            layoutManagerMain.smoothScrollToPosition(mainCategoryList, null, position);
+                        } else {
+                            layoutManagerMain.smoothScrollToPosition(mainCategoryList, null, position - 1);
+                        }
                     }
                 });
             }
