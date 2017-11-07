@@ -15,12 +15,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
+import com.rocket.sivico.Data.GlobalConfig;
 import com.rocket.sivico.Data.Report;
 import com.rocket.sivico.Data.SivicoMenuActivity;
 import com.rocket.sivico.R;
 
-public class MapsActivity extends SivicoMenuActivity implements OnMapReadyCallback {
+public class MapsActivity extends SivicoMenuActivity implements OnMapReadyCallback,
+        ClusterManager.OnClusterClickListener<Report>,
+        ClusterManager.OnClusterInfoWindowClickListener<Report>,
+        ClusterManager.OnClusterItemClickListener<Report>,
+        ClusterManager.OnClusterItemInfoWindowClickListener<Report> {
+
 
     private GoogleMap mMap;
     private ClusterManager<Report> mClusterManager;
@@ -58,7 +65,7 @@ public class MapsActivity extends SivicoMenuActivity implements OnMapReadyCallba
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        setUpClusterer();
+        setUpClusters();
         mReportRef = FirebaseDatabase.getInstance().getReference().child("reports");
         mReportRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -76,7 +83,7 @@ public class MapsActivity extends SivicoMenuActivity implements OnMapReadyCallba
         });
     }
 
-    private void setUpClusterer() {
+    private void setUpClusters() {
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
         mClusterManager = new ClusterManager<>(this, mMap);
@@ -87,6 +94,10 @@ public class MapsActivity extends SivicoMenuActivity implements OnMapReadyCallba
         mMap.setOnMarkerClickListener(mClusterManager);
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+        mClusterManager.setOnClusterClickListener(this);
+        mClusterManager.setOnClusterInfoWindowClickListener(this);
+        mClusterManager.setOnClusterItemClickListener(this);
+        mClusterManager.setOnClusterItemInfoWindowClickListener(this);
     }
 
     @Override
@@ -97,5 +108,30 @@ public class MapsActivity extends SivicoMenuActivity implements OnMapReadyCallba
             mMap.moveCamera(CameraUpdateFactory.zoomTo(18));
         }
         located = true;
+    }
+
+    @Override
+    public boolean onClusterClick(Cluster<Report> cluster) {
+        return false;
+    }
+
+    @Override
+    public void onClusterInfoWindowClick(Cluster<Report> cluster) {
+
+    }
+
+    @Override
+    public boolean onClusterItemClick(Report report) {
+        Intent intent = new Intent(this, DetailsActivity.class);
+        intent.putExtra(GlobalConfig.PARAM_REPORT, report);
+        startActivity(intent);
+        return false;
+    }
+
+    @Override
+    public void onClusterItemInfoWindowClick(Report report) {
+        Intent intent = new Intent(this, DetailsActivity.class);
+        intent.putExtra(GlobalConfig.PARAM_REPORT, report);
+        startActivity(intent);
     }
 }

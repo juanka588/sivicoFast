@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(
                 AuthUI.getInstance().createSignInIntentBuilder()
                         .setTheme(AuthUI.getDefaultTheme())
-                        .setLogo(R.drawable.city)
+                        .setLogo(R.drawable.city_side)
                         .setAvailableProviders(getSelectedProviders())
                         .setTosUrl(FIREBASE_TOS_URL)
                         .setPrivacyPolicyUrl(FIREBASE_PRIVACY_POLICY_URL)
@@ -120,10 +120,10 @@ public class MainActivity extends AppCompatActivity {
                         .build());
 
 
-        selectedProviders.add(
-                new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER)
-                        .setPermissions(getFacebookPermissions())
-                        .build());
+//        selectedProviders.add(
+//                new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER)
+//                        .setPermissions(getFacebookPermissions())
+//                        .build());
 
 //            selectedProviders.add(new AuthUI.IdpConfig.Builder(AuthUI.TWITTER_PROVIDER).build());
 
