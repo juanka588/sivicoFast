@@ -26,7 +26,7 @@ public class CategoryHolder extends RecyclerView.ViewHolder {
     public Button prev;
     ImageView image;
 
-    CategoryHolder(View itemView) {
+    public CategoryHolder(View itemView) {
         super(itemView);
         cv = itemView.findViewById(R.id.card_view_category);
         ll = itemView.findViewById(R.id.category_background);

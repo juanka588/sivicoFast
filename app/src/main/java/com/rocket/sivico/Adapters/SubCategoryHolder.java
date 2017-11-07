@@ -20,7 +20,7 @@ public class SubCategoryHolder extends RecyclerView.ViewHolder {
     TextView title;
     TextView number;
 
-    SubCategoryHolder(View itemView) {
+    public SubCategoryHolder(View itemView) {
         super(itemView);
         cv = itemView.findViewById(R.id.card_view_category);
         ll = itemView.findViewById(R.id.category_background);

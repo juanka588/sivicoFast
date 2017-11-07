@@ -24,7 +24,7 @@ public class ReportHolder extends RecyclerView.ViewHolder {
     TextView hour;
     ImageView image;
 
-    ReportHolder(View itemView) {
+    public ReportHolder(View itemView) {
         super(itemView);
         cv = itemView.findViewById(R.id.card_view_report);
         title = itemView.findViewById(R.id.report_title);
