@@ -442,7 +442,9 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                             Log.e(TAG, "error binding report");
                             return;
                         }
-                        report.addEvidence(taskSnapshot.getDownloadUrl().toString());
+                        if (taskSnapshot.getDownloadUrl() != null) {
+                            report.addEvidence(taskSnapshot.getDownloadUrl().toString());
+                        }
                         mReportRef.getRef().child(key).updateChildren(report.toMap());
                         File photo = new File(imageUri.getPath());
                         photo.delete();

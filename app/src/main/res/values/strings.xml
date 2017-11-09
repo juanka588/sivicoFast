@@ -131,7 +131,7 @@
     <string name="no_reports">No tienes nigun reporte</string>
     <string name="prev">anterior</string>
     <string name="next">siguiente</string>
-    <string name="title_activity_new_user">NewUserActivity</string>
+    <string name="title_activity_new_user">Nuevo Miembro</string>
     <string name="name">Nombre:</string>
     <string name="please_select">Seleccione por favor</string>
     <string name="banner_image">Logo Sivico</string>

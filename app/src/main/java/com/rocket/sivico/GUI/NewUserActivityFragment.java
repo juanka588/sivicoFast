@@ -170,7 +170,7 @@ public class NewUserActivityFragment extends Fragment {
         try {
             date = Utils.sivicoDateFormat.parse(userBirthday.getText().toString());
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.toString(), e.fillInStackTrace());
         }
         if (editedUser != null) {
             editedUser.setName(userName.getText().toString());
@@ -188,7 +188,6 @@ public class NewUserActivityFragment extends Fragment {
         String uri;
         if (photoUrl == null) {
             uri = "no-pic";
-
         } else {
             uri = photoUrl.toString();
         }
@@ -222,7 +221,6 @@ public class NewUserActivityFragment extends Fragment {
                 .addOnSuccessListener(getActivity(), new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        //noinspection LogConditional
                         String path = taskSnapshot.getMetadata().getReference().getPath();
                         Log.d(TAG, "uploadPhoto:onSuccess:" + path);
                         Toast.makeText(getContext(), "Image uploaded",

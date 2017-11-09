@@ -182,6 +182,9 @@ public class User implements Parcelable {
     }
 
     public void setAnonymous(boolean anonymous) {
+        if (!anonymous) {
+            return;
+        }
         this.name = "Anonymous";
         this.idNumber = "000000";
         this.birthday = "000000";
