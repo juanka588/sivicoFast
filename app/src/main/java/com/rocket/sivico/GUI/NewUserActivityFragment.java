@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +62,8 @@ public class NewUserActivityFragment extends Fragment {
     private RadioButton femaleRB;
     private EditText region;
     private EditText neighborhood;
+    private Switch anonymousSwitch;
+
     private OnEditUser callback;
     private FloatingActionButton saveUser;
     private StorageReference mImageRef;
@@ -70,6 +73,7 @@ public class NewUserActivityFragment extends Fragment {
     private int mMonth;
     private int mDay;
     private boolean genderSelected;
+    private boolean isAnonymous;
 
     public NewUserActivityFragment() {
     }
@@ -94,6 +98,7 @@ public class NewUserActivityFragment extends Fragment {
     }
 
     private void bindControls(View view) {
+        anonymousSwitch = view.findViewById(R.id.switchAnonymous);
         userPhoto = view.findViewById(R.id.user_photo);
         userNewPic = view.findViewById(R.id.take_user_photo);
         userName = view.findViewById(R.id.user_name);
@@ -177,6 +182,7 @@ public class NewUserActivityFragment extends Fragment {
             editedUser.setNeighborhood(neighborhood.getText().toString());
             callback.onEditUser(editedUser);
         }
+        isAnonymous = anonymousSwitch.isChecked();
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         Uri photoUrl = firebaseUser.getPhotoUrl();
         String uri;
@@ -199,6 +205,7 @@ public class NewUserActivityFragment extends Fragment {
                 uri,
                 0
         );
+        newUser.setAnonymous(isAnonymous);
         if (newUser.getPhoto().equals("no-pic")) {
             if (imageUri != null) {
                 uploadPhoto(callback, newUser);

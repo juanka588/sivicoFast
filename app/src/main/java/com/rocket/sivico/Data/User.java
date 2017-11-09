@@ -180,4 +180,15 @@ public class User implements Parcelable {
         parcel.writeString(photo);
         parcel.writeInt(score);
     }
+
+    public void setAnonymous(boolean anonymous) {
+        this.name = "Anonymous";
+        this.idNumber = "000000";
+        this.birthday = "000000";
+        this.phone = "000000";
+        this.region = "000000";
+        this.neighborhood = "000000";
+        this.email = "000000";
+        this.photo = "no-pic";
+    }
 }

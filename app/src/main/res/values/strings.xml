@@ -153,4 +153,5 @@
     <string name="go_to_score">Acumula puntos para obtener grandes premios y subir tu rango</string>
     <string name="get_point">Acumula Puntos</string>
     <string name="please_take_picture">Toma una foto primero</string>
+    <string name="set_anonymous">Usuario Anonimo</string>
 </resources>

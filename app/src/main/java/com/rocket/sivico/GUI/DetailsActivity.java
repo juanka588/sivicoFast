@@ -1,10 +1,14 @@
 package com.rocket.sivico.GUI;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.rocket.sivico.Data.GlobalConfig;
 import com.rocket.sivico.Data.Report;
 import com.rocket.sivico.Data.SivicoMenuActivity;
@@ -40,15 +44,15 @@ public class DetailsActivity extends SivicoMenuActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.nav_share:
-//                ShareLinkContent content = new ShareLinkContent.Builder()
-//                        .setContentUrl(Uri.parse(report.getEvidence().get("img1").toString()))
-//                        .setQuote(report.getDescription())
-//                        .setShareHashtag(new ShareHashtag.Builder()
-//                                .setHashtag("#sivicoReports")
-//                                .build())
-//                        .build();
-//                ShareDialog shareDialog = new ShareDialog(DetailsActivity.this);
-//                shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
+                ShareLinkContent content = new ShareLinkContent.Builder()
+                        .setContentUrl(Uri.parse(report.getEvidence().get("img1").toString()))
+                        .setQuote(report.getDescription())
+                        .setShareHashtag(new ShareHashtag.Builder()
+                                .setHashtag("#sivicoReports")
+                                .build())
+                        .build();
+                ShareDialog shareDialog = new ShareDialog(DetailsActivity.this);
+                shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
                 break;
         }
         return true;

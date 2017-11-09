@@ -33,13 +33,22 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/edit" />
+
         </LinearLayout>
+
+        <Switch
+            android:id="@+id/switchAnonymous"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/set_anonymous" />
 
         <TextView
             style="@style/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/name" />
+
 
         <EditText
             android:id="@+id/user_name"

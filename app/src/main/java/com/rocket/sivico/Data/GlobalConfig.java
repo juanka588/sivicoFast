@@ -42,7 +42,7 @@ public class GlobalConfig {
                     User userRet = new User(user.getUid()
                             , dataSnapshot.child("name").getValue().toString()
                             , dataSnapshot.child("id_number").getValue().toString()
-                            , dataSnapshot.child("gender").getValue() == "true"
+                            , ((Boolean) (dataSnapshot.child("gender").getValue())).booleanValue()
                             , dataSnapshot.child("birthday").getValue().toString()
                             , dataSnapshot.child("phone").getValue().toString()
                             , dataSnapshot.child("region").getValue().toString()
