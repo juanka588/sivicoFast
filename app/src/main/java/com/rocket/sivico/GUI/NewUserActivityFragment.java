@@ -83,16 +83,14 @@ public class NewUserActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_user, container, false);
         bindControls(view);
-        try {
-            Bundle bundle = getArguments();
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
             editedUser = bundle.getParcelable(GlobalConfig.PARAM_USER);
-            if (editedUser != null) {
-                bindUser(editedUser);
-            }
-        } catch (Exception e) {
+            bindUser(editedUser);
+        } else {
             editedUser = null;
             bindUser(FirebaseAuth.getInstance().getCurrentUser());
-            Log.e(TAG, e.toString(), e.fillInStackTrace());
         }
         return view;
     }
@@ -180,6 +178,10 @@ public class NewUserActivityFragment extends Fragment {
             editedUser.setPhone(userPhone.getText().toString());
             editedUser.setRegion(region.getText().toString());
             editedUser.setNeighborhood(neighborhood.getText().toString());
+            if (imageUri != null) {
+                uploadPhoto(callback, editedUser);
+                return;
+            }
             callback.onEditUser(editedUser);
         }
         isAnonymous = anonymousSwitch.isChecked();
@@ -208,10 +210,12 @@ public class NewUserActivityFragment extends Fragment {
         if (newUser.getPhoto().equals("no-pic")) {
             if (imageUri != null) {
                 uploadPhoto(callback, newUser);
+                return;
             }
-        } else {
-            callback.onEditUser(newUser);
+            Toast.makeText(getContext(), getString(R.string.user_no_image), Toast.LENGTH_LONG).show();
         }
+        callback.onEditUser(newUser);
+
     }
 
     private void uploadPhoto(final OnEditUser callback, final User newUser) {

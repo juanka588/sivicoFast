@@ -269,6 +269,9 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                 }
             }
         });
+
+        dateTx.setText(Utils.getFormatDate(new Date().getTime() / 1000));
+        hourTx.setText(Utils.getHour(new Date().getTime() / 1000));
     }
 
     private Report bindReportFromControls() {
@@ -281,11 +284,14 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
             if (desc.isEmpty()) {
                 desc = "Mi nuevo reporte de " + category.getName();
             }
-            String lat = String.valueOf(root.userPos.latitude);
-            String lon = String.valueOf(root.userPos.longitude);
+            String lat = GlobalConfig.DEFAULT_LATITUDE;
+            String lon = GlobalConfig.DEFAULT_LONGITUDE;
             if (newPos != null) {
                 lat = String.valueOf(newPos.latitude);
                 lon = String.valueOf(newPos.longitude);
+            } else if (root.userPos != null) {
+                lat = String.valueOf(root.userPos.latitude);
+                lon = String.valueOf(root.userPos.longitude);
             }
             return new Report(
                     String.valueOf(dateTime.getTime() / 1000),
@@ -440,6 +446,8 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                         Report report = bindReportFromControls();
                         if (report == null) {
                             Log.e(TAG, "error binding report");
+                            Toast.makeText(getContext(), "Report Created",
+                                    Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if (taskSnapshot.getDownloadUrl() != null) {

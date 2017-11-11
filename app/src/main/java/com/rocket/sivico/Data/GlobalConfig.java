@@ -20,6 +20,8 @@ public class GlobalConfig {
     private static final String TAG = GlobalConfig.class.getSimpleName();
     public static final String SIVICO_DIR = "sivico";
     public static final String PARAM_USER = "user";
+    public static final String DEFAULT_LATITUDE = "4.6482837";
+    public static final String DEFAULT_LONGITUDE = "-74.2478934";
     public static DatabaseReference userRef;
 
     static {
