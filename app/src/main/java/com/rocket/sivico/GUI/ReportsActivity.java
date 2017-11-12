@@ -9,11 +9,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -74,7 +77,6 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
 
     private void attachRecyclerViewAdapter() {
         mAdapter = getAdapter();
-
         // Scroll to bottom on new messages
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -130,14 +132,27 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
         }
         String id = mAuth.getCurrentUser().getUid();
         Query query = mReportRef.orderByChild("owner").startAt(id).endAt(id);
+        FirebaseRecyclerOptions<Report> options =
+                new FirebaseRecyclerOptions.Builder<Report>()
+                        .setQuery(query, Report.class)
+                        .build();
         return new FirebaseRecyclerAdapter<Report, ReportHolder>(
-                Report.class,
-                R.layout.report_item_view,
-                ReportHolder.class,
-                query,
-                this) {
+                options) {
             @Override
-            public void populateViewHolder(ReportHolder holder, final Report report, int position) {
+            public ReportHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.report_item_view, parent, false);
+                return new ReportHolder(view);
+            }
+
+            @Override
+            public void onDataChanged() {
+                // If there are no chat messages, show a view that invites the user to add a message.
+                mEmptyListMessage.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            protected void onBindViewHolder(ReportHolder holder, int position, final Report report) {
                 holder.bind(report);
                 holder.cv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -146,13 +161,18 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
                     }
                 });
             }
-
-            @Override
-            public void onDataChanged() {
-                // If there are no chat messages, show a view that invites the user to add a message.
-                mEmptyListMessage.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
-            }
         };
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAdapter.stopListening();
+    }
 }

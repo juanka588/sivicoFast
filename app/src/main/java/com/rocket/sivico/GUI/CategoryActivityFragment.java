@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -50,6 +51,7 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
 
         rootView = inflater.inflate(R.layout.fragment_category, container, false);
         mainCatAdapter = getAdapter();
+        mainCatAdapter.startListening();
 
         mainCategoryList = rootView.findViewById(R.id.main_category_list);
         layoutManagerMain = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -79,18 +81,32 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
         });
 
         children.setAdapter(subCatAdapter);
+        subCatAdapter.startListening();
     }
 
     private FirebaseRecyclerAdapter<SubCategory, SubCategoryHolder> getAdapter(Category category) {
         Query query = subCatRef.orderByChild("parent").startAt(category.getId()).endAt(category.getId());
-        return new FirebaseRecyclerAdapter<SubCategory, SubCategoryHolder>(
-                SubCategory.class,
-                R.layout.category_item_view,
-                SubCategoryHolder.class,
-                query,
-                this) {
+        FirebaseRecyclerOptions<SubCategory> options =
+                new FirebaseRecyclerOptions.Builder<SubCategory>()
+                        .setQuery(query, SubCategory.class)
+                        .build();
+        return new FirebaseRecyclerAdapter<SubCategory, SubCategoryHolder>(options) {
             @Override
-            public void populateViewHolder(SubCategoryHolder holder, final SubCategory subCategory, int position) {
+            public SubCategoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.category_item_view, parent, false);
+                return new SubCategoryHolder(view);
+            }
+
+
+            @Override
+            public void onDataChanged() {
+                // If there are no chat messages, show a view that invites the user to add a message.
+//                mEmptyListMessage.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            protected void onBindViewHolder(SubCategoryHolder holder, int position, final SubCategory subCategory) {
                 holder.bind(subCategory, position + 1);
                 holder.cv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -101,26 +117,33 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
                     }
                 });
             }
-
-            @Override
-            public void onDataChanged() {
-                // If there are no chat messages, show a view that invites the user to add a message.
-//                mEmptyListMessage.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
-            }
         };
     }
 
 
     public FirebaseRecyclerAdapter<Category, CategoryHolder> getAdapter() {
         Query query = catRef.orderByKey();
-        return new FirebaseRecyclerAdapter<Category, CategoryHolder>(
-                Category.class,
-                R.layout.category_main_item_view,
-                CategoryHolder.class,
-                query,
-                this) {
+        FirebaseRecyclerOptions<Category> options =
+                new FirebaseRecyclerOptions.Builder<Category>()
+                        .setQuery(query, Category.class)
+                        .build();
+        return new FirebaseRecyclerAdapter<Category, CategoryHolder>(options) {
             @Override
-            public void populateViewHolder(CategoryHolder holder, final Category category, final int position) {
+            public CategoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.category_main_item_view, parent, false);
+                return new CategoryHolder(view);
+            }
+
+            @Override
+            public void onDataChanged() {
+                // If there are no chat messages, show a view that invites the user to add a message.
+                Log.e(TAG, "data received");
+//                mEmptyListMessage.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            protected void onBindViewHolder(CategoryHolder holder, final int position, final Category category) {
                 holder.bind(category);
                 holder.cv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -145,12 +168,6 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
                     }
                 });
             }
-
-            @Override
-            public void onDataChanged() {
-                // If there are no chat messages, show a view that invites the user to add a message.
-//                mEmptyListMessage.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
-            }
         };
     }
 
@@ -161,6 +178,17 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
             if (resultCode == Activity.RESULT_OK) {
                 this.getActivity().finish();
             }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mainCatAdapter != null) {
+            mainCatAdapter.stopListening();
+        }
+        if (subCatAdapter != null) {
+            subCatAdapter.stopListening();
         }
     }
 }

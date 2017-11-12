@@ -120,10 +120,10 @@ public class MainActivity extends AppCompatActivity {
                         .build());
 
 
-//        selectedProviders.add(
-//                new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER)
-//                        .setPermissions(getFacebookPermissions())
-//                        .build());
+        selectedProviders.add(
+                new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER)
+                        .setPermissions(getFacebookPermissions())
+                        .build());
 
 //            selectedProviders.add(new AuthUI.IdpConfig.Builder(AuthUI.TWITTER_PROVIDER).build());
 
