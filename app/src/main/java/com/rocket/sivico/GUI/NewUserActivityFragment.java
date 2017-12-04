@@ -2,6 +2,7 @@ package com.rocket.sivico.GUI;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -159,6 +161,25 @@ public class NewUserActivityFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 bindFromControls(callback);
+            }
+        });
+        anonymousSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    final SivicoDialog dialog = new SivicoDialog(getContext(), R.drawable.city_side, getString(R.string.app_name)
+                            , getString(R.string.large_text), getString(R.string.yes_definitely), getString(R.string.cancel)
+                            , R.style.ThemeSivicoDialog, SivicoDialog.TYPE_TWO);
+                    dialog.show();
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface d) {
+                            if (dialog.getSelection() == SivicoDialog.SELECTION_POSITIVE) {
+                                bindFromControls(callback);
+                            }
+                        }
+                    });
+                }
             }
         });
     }

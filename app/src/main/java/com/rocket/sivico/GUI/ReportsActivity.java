@@ -170,9 +170,13 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
     }
 
     private void cloudCheck(String key, Report report) {
-        String image = report.getEvidence().get("img").toString();
-        if (image.contains("file://")) {
-            Utils.uploadPhoto(this, this, report, key);
+        String image = report.getEvidence().get("img1").toString();
+        if (Utils.isOnline(this)) {
+            if (image.contains("file://")) {
+                Utils.uploadPhoto(this, this, report, key);
+            } else {
+                //TODO:show icon offline and not sync
+            }
         }
     }
 

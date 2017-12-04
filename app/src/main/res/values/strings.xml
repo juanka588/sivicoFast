@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sivico</string>
+    <string name="app_name">VigiApp</string>
     <string name="enter">Entra</string>
     <string name="title_activity_reports">Mis Reportes</string>
 
@@ -156,4 +156,6 @@
     <string name="set_anonymous">Usuario Anonimo</string>
     <string name="user_no_image">No has subido una imagen, puedes intentarlo cuando quieras en la opcion editar</string>
     <string name="title_activity_sub_category">SubCategoryActivity</string>
+    <string name="cancel">Cancelar</string>
+    <string name="yes_definitely">Aceptar</string>
 </resources>

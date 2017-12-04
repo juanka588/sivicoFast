@@ -259,6 +259,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                                 Toast.LENGTH_SHORT).show();
                         return;
                     }
+                    report.addEvidence(imageUri.toString());
                     mReportRef.getRef().child(key).updateChildren(report.toMap());
                     Intent resultIntent = new Intent(getActivity(), CategoryActivity.class);
                     getActivity().setResult(Activity.RESULT_OK, resultIntent);
