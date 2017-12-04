@@ -17,6 +17,7 @@ import com.rocket.sivico.Interfaces.OnUserReady;
 public class GlobalConfig {
     public static final String PARAM_REPORT = "report";
     public static final String PARAM_CATEGORY = "category";
+    public static final String PARAM_SUBCATEGORY = "subcategory";
     private static final String TAG = GlobalConfig.class.getSimpleName();
     public static final String SIVICO_DIR = "sivico";
     public static final String PARAM_USER = "user";

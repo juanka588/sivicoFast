@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,15 +32,12 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
 
     private static final String TAG = CategoryActivityFragment.class.getSimpleName();
     private static final int CREATE_REPORT_REQUEST = 2003;
-    private RecyclerView children;
+
     private View rootView;
     private DatabaseReference catRef = FirebaseDatabase.getInstance().getReference("categories");
-    private DatabaseReference subCatRef = FirebaseDatabase.getInstance().getReference("subcategories");
     private RecyclerView mainCategoryList;
     private LinearLayoutManager layoutManagerMain;
-    private LinearLayoutManager layoutManagerSub;
     private FirebaseRecyclerAdapter<Category, CategoryHolder> mainCatAdapter;
-    private FirebaseRecyclerAdapter<SubCategory, SubCategoryHolder> subCatAdapter;
 
 
     public CategoryActivityFragment() {
@@ -54,70 +52,20 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
         mainCatAdapter.startListening();
 
         mainCategoryList = rootView.findViewById(R.id.main_category_list);
-        layoutManagerMain = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        layoutManagerMain = new GridLayoutManager(getContext(), 2);
         mainCategoryList.setLayoutManager(layoutManagerMain);
         mainCategoryList.setAdapter(mainCatAdapter);
 
         catRef.keepSynced(true);
-        subCatRef.keepSynced(true);
         return rootView;
     }
 
     @Override
     public void onCategoryClick(Category category) {
         Log.e(TAG, category.getName() + " id: " + category.getId());
-        children = rootView.findViewById(R.id.child_category_list);
-        subCatAdapter = getAdapter(category);
-        children.setLayoutManager(new LinearLayoutManager(getContext()));
-        layoutManagerSub = new LinearLayoutManager(getContext());
-        children.setLayoutManager(layoutManagerSub);
-
-        // Scroll to bottom on new messages
-        subCatAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                layoutManagerSub.smoothScrollToPosition(mainCategoryList, null, subCatAdapter.getItemCount());
-            }
-        });
-
-        children.setAdapter(subCatAdapter);
-        subCatAdapter.startListening();
-    }
-
-    private FirebaseRecyclerAdapter<SubCategory, SubCategoryHolder> getAdapter(Category category) {
-        Query query = subCatRef.orderByChild("parent").startAt(category.getId()).endAt(category.getId());
-        FirebaseRecyclerOptions<SubCategory> options =
-                new FirebaseRecyclerOptions.Builder<SubCategory>()
-                        .setQuery(query, SubCategory.class)
-                        .build();
-        return new FirebaseRecyclerAdapter<SubCategory, SubCategoryHolder>(options) {
-            @Override
-            public SubCategoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.category_item_view, parent, false);
-                return new SubCategoryHolder(view);
-            }
-
-
-            @Override
-            public void onDataChanged() {
-                // If there are no chat messages, show a view that invites the user to add a message.
-//                mEmptyListMessage.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
-            }
-
-            @Override
-            protected void onBindViewHolder(SubCategoryHolder holder, int position, final SubCategory subCategory) {
-                holder.bind(subCategory, position + 1);
-                holder.cv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getActivity(), NewReportActivity.class);
-                        intent.putExtra(GlobalConfig.PARAM_CATEGORY, subCategory);
-                        startActivityForResult(intent, CREATE_REPORT_REQUEST);
-                    }
-                });
-            }
-        };
+        Intent intent = new Intent(getActivity(), SubCategoryActivity.class);
+        intent.putExtra(GlobalConfig.PARAM_CATEGORY, category);
+        startActivity(intent);
     }
 
 
@@ -131,7 +79,7 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
             @Override
             public CategoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.category_main_item_view, parent, false);
+                        .inflate(R.layout.category_main_2_item_view, parent, false);
                 return new CategoryHolder(view);
             }
 
@@ -151,6 +99,9 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
                         CategoryActivityFragment.this.onCategoryClick(category);
                     }
                 });
+                if (holder.next == null) {
+                    return;
+                }
                 holder.next.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -187,8 +138,13 @@ public class CategoryActivityFragment extends Fragment implements OnCategoryClic
         if (mainCatAdapter != null) {
             mainCatAdapter.stopListening();
         }
-        if (subCatAdapter != null) {
-            subCatAdapter.stopListening();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mainCatAdapter != null) {
+            mainCatAdapter.startListening();
         }
     }
 }

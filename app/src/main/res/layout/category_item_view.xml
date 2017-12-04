@@ -45,6 +45,7 @@
         <ImageView xmlns:app="http://schemas.android.com/tools"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:src="@drawable/ic_next"
             app:srcCompat="@drawable/ic_next" />
 
     </LinearLayout>

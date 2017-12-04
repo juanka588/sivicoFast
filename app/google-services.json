@@ -15,16 +15,24 @@
       },
       "oauth_client": [
         {
+          "client_id": "56305061820-0hmp3tpcodhr8kkq3h7s5jag7g66g5ej.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
           "client_id": "56305061820-jk5osvl7eb4rlgq61uc6aa9btrnpoa7b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rocket.sivico",
+            "certificate_hash": "9f65e61b1099e7e5fd4cd0c8f90c1d7673277756"
+          }
+        },
+        {
+          "client_id": "56305061820-ra4dm97bs108s9lh2f64r178rdiibdtn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.rocket.sivico",
             "certificate_hash": "82e5c221da0cf2300478401777d4c5f08808f968"
           }
-        },
-        {
-          "client_id": "56305061820-0hmp3tpcodhr8kkq3h7s5jag7g66g5ej.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [

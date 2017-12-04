@@ -98,7 +98,6 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
 
     private GoogleMap mMap;
     private SivicoMenuActivity root;
-    private StorageReference mImageRef;
     private SubCategory category;
     private MapView mapView;
     private DatabaseReference mReportRef = FirebaseDatabase.getInstance().getReference("reports");
@@ -117,7 +116,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
         preview = view.findViewById(R.id.preview_image);
         Bundle bundle = getArguments();
         initControls(view);
-        category = bundle.getParcelable(GlobalConfig.PARAM_CATEGORY);
+        category = bundle.getParcelable(GlobalConfig.PARAM_SUBCATEGORY);
         associateCategory(category, view);
         if (savedInstanceState != null) {
             imageUri = savedInstanceState.getParcelable(IMAGE_URI);
@@ -252,7 +251,18 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
             @Override
             public void onClick(View view) {
                 if (imageUri != null) {
-                    uploadPhoto(imageUri);
+                    String key = mReportRef.push().getKey();
+                    Report report = bindReportFromControls();
+                    if (report == null) {
+                        Log.e(TAG, "error binding report");
+                        Toast.makeText(getContext(), "Report not created",
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    mReportRef.getRef().child(key).updateChildren(report.toMap());
+                    Intent resultIntent = new Intent(getActivity(), CategoryActivity.class);
+                    getActivity().setResult(Activity.RESULT_OK, resultIntent);
+                    getActivity().finish();
                 } else {
                     Snackbar.make(view, getString(R.string.please_take_picture), Snackbar.LENGTH_LONG);
                 }
@@ -422,59 +432,4 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
         }
     }
 
-
-    private void uploadPhoto(Uri uri) {
-        // Reset UI
-        hideDownloadUI();
-        Toast.makeText(getContext(), "Uploading...", Toast.LENGTH_SHORT).show();
-
-        // Upload to Cloud Storage
-        String uuid = UUID.randomUUID().toString();
-        mImageRef = FirebaseStorage.getInstance().getReference(uuid);
-        mImageRef.putFile(uri)
-                .addOnSuccessListener(getActivity(), new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        //noinspection LogConditional
-                        String path = taskSnapshot.getMetadata().getReference().getPath();
-                        Log.d(TAG, "uploadPhoto:onSuccess:" + path);
-                        Toast.makeText(getContext(), "Image uploaded",
-                                Toast.LENGTH_SHORT).show();
-
-                        showDownloadUI();
-                        String key = mReportRef.push().getKey();
-                        Report report = bindReportFromControls();
-                        if (report == null) {
-                            Log.e(TAG, "error binding report");
-                            Toast.makeText(getContext(), "Report Created",
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        if (taskSnapshot.getDownloadUrl() != null) {
-                            report.addEvidence(taskSnapshot.getDownloadUrl().toString());
-                        }
-                        mReportRef.getRef().child(key).updateChildren(report.toMap());
-                        File photo = new File(imageUri.getPath());
-                        photo.delete();
-                        Intent resultIntent = new Intent(getActivity(), CategoryActivity.class);
-                        getActivity().setResult(Activity.RESULT_OK, resultIntent);
-                        getActivity().finish();
-                    }
-                })
-                .addOnFailureListener(getActivity(), new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "uploadPhoto:onError", e);
-                        Toast.makeText(getContext(), "Upload failed",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void showDownloadUI() {
-    }
-
-    private void hideDownloadUI() {
-
-    }
 }

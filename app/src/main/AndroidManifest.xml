@@ -35,6 +35,17 @@
             android:authorities="com.facebook.app.FacebookContentProvider{357397514717772}"
             android:exported="true" />
 
+        <service android:name=".Services.SivicoInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Services.SivicoMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity android:name=".GUI.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -101,7 +112,16 @@
             android:name=".GUI.NewUserActivity"
             android:label="@string/title_activity_new_user"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GUI.ScoreActivity"/>
+        <activity android:name=".GUI.ScoreActivity" />
+        <activity
+            android:name=".GUI.SubCategoryActivity"
+            android:label="@string/title_activity_sub_category"
+            android:parentActivityName=".GUI.CategoryActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.rocket.sivico.GUI.CategoryActivity" />
+        </activity>
     </application>
 
 </manifest>

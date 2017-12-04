@@ -155,4 +155,5 @@
     <string name="please_take_picture">Toma una foto primero</string>
     <string name="set_anonymous">Usuario Anonimo</string>
     <string name="user_no_image">No has subido una imagen, puedes intentarlo cuando quieras en la opcion editar</string>
+    <string name="title_activity_sub_category">SubCategoryActivity</string>
 </resources>

@@ -25,10 +25,14 @@ import com.rocket.sivico.Adapters.ReportHolder;
 import com.rocket.sivico.Data.GlobalConfig;
 import com.rocket.sivico.Data.Report;
 import com.rocket.sivico.Data.SivicoMenuActivity;
+import com.rocket.sivico.Interfaces.OnImageUploaded;
 import com.rocket.sivico.Interfaces.OnReportClick;
 import com.rocket.sivico.R;
+import com.rocket.sivico.Utils;
 
-public class ReportsActivity extends SivicoMenuActivity implements OnReportClick, LifecycleRegistryOwner {
+import java.io.File;
+
+public class ReportsActivity extends SivicoMenuActivity implements OnReportClick, OnImageUploaded {
 
     private static final String TAG = ReportsActivity.class.getSimpleName();
     private SwipeRefreshLayout refreshLayout;
@@ -154,6 +158,7 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
             @Override
             protected void onBindViewHolder(ReportHolder holder, int position, final Report report) {
                 holder.bind(report);
+                cloudCheck(mAdapter.getRef(position).getKey(), report);
                 holder.cv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -164,15 +169,37 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
         };
     }
 
+    private void cloudCheck(String key, Report report) {
+        String image = report.getEvidence().get("img").toString();
+        if (image.contains("file://")) {
+            Utils.uploadPhoto(this, this, report, key);
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        mAdapter.startListening();
+        if (mAdapter != null) {
+            mAdapter.startListening();
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mAdapter.stopListening();
+        if (mAdapter != null) {
+            mAdapter.stopListening();
+        }
+    }
+
+    @Override
+    public void onImageUploaded(String downloadURL, Report report, String key) {
+        Toast.makeText(this, "Image uploaded",
+                Toast.LENGTH_SHORT).show();
+        String prevImage = report.getEvidence().get("img1").toString();
+        report.addEvidence(downloadURL);
+        mReportRef.getRef().child(key).updateChildren(report.toMap());
+        File photo = new File(prevImage);
+        photo.delete();
     }
 }
