@@ -167,8 +167,8 @@ public class NewUserActivityFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    final SivicoDialog dialog = new SivicoDialog(getContext(), R.drawable.city_side, getString(R.string.app_name)
-                            , getString(R.string.large_text), getString(R.string.yes_definitely), getString(R.string.cancel)
+                    final SivicoDialog dialog = new SivicoDialog(getContext(), R.drawable.city_side, getString(R.string.anonymous)
+                            , getString(R.string.anonymous_question), getString(R.string.yes_definitely), getString(R.string.cancel)
                             , R.style.ThemeSivicoDialog, SivicoDialog.TYPE_TWO);
                     dialog.show();
                     dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
