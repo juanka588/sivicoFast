@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SivicoFast.iml" filepath="$PROJECT_DIR$/SivicoFast.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sivicoFast.iml" filepath="$PROJECT_DIR$/sivicoFast.iml" />
     </modules>
   </component>
 </project>

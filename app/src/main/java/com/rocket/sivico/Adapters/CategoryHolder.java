@@ -40,7 +40,9 @@ public class CategoryHolder extends RecyclerView.ViewHolder {
 
     public void bind(Category category) {
         this.title.setText(Utils.formatString(category.getName()));
-        this.description.setText(Utils.formatString(category.getDescription()));
+        if (this.description != null) {
+            this.description.setText(Utils.formatString(category.getDescription()));
+        }
         String resName = category.getIcon();
         Context context = this.cv.getContext();
         int icon = R.drawable.ic_nature;
