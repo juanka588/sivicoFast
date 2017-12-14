@@ -10,6 +10,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,6 +20,7 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.rocket.sivico.Data.GlobalConfig;
 import com.rocket.sivico.Data.Report;
+import com.rocket.sivico.Data.ReportRender;
 import com.rocket.sivico.Data.SivicoMenuActivity;
 import com.rocket.sivico.R;
 
@@ -94,10 +96,19 @@ public class MapsActivity extends SivicoMenuActivity implements OnMapReadyCallba
         mMap.setOnMarkerClickListener(mClusterManager);
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+        mClusterManager.setRenderer(new ReportRender(this, mMap, mClusterManager));
         mClusterManager.setOnClusterClickListener(this);
         mClusterManager.setOnClusterInfoWindowClickListener(this);
         mClusterManager.setOnClusterItemClickListener(this);
         mClusterManager.setOnClusterItemInfoWindowClickListener(this);
+
+        mMap.setInfoWindowAdapter(mClusterManager.getMarkerManager());
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                mClusterManager.onInfoWindowClick(marker);
+            }
+        });
     }
 
     @Override
@@ -122,9 +133,6 @@ public class MapsActivity extends SivicoMenuActivity implements OnMapReadyCallba
 
     @Override
     public boolean onClusterItemClick(Report report) {
-        Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra(GlobalConfig.PARAM_REPORT, report);
-        startActivity(intent);
         return false;
     }
 
