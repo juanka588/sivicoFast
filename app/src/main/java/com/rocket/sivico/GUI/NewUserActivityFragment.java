@@ -26,8 +26,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
@@ -243,18 +245,6 @@ public class NewUserActivityFragment extends Fragment {
         String uuid = UUID.randomUUID().toString();
         mImageRef = FirebaseStorage.getInstance().getReference(uuid);
         mImageRef.putFile(imageUri)
-                .addOnSuccessListener(getActivity(), new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        String path = taskSnapshot.getMetadata().getReference().getPath();
-                        Log.d(TAG, "uploadPhoto:onSuccess:" + path);
-                        Toast.makeText(getContext(), "Image uploaded",
-                                Toast.LENGTH_SHORT).show();
-
-                        newUser.setPhoto(taskSnapshot.getDownloadUrl().toString());
-                        callback.onEditUser(newUser);
-                    }
-                })
                 .addOnFailureListener(getActivity(), new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -262,7 +252,27 @@ public class NewUserActivityFragment extends Fragment {
                         Toast.makeText(getContext(), "Upload failed",
                                 Toast.LENGTH_SHORT).show();
                     }
-                });
+                }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return mImageRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    callback.onEditUser(newUser);
+                } else {
+                    Log.w(TAG, "uploadPhoto:onError", task.getException());
+                }
+            }
+        });
     }
 
     private void bindUser(FirebaseUser user) {

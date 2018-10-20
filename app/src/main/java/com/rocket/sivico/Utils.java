@@ -16,10 +16,11 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -30,7 +31,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -148,7 +148,7 @@ public class Utils {
         String uri = report.getEvidence().get("img1").toString();
         // Upload to Cloud Storage
         String uuid = UUID.randomUUID().toString();
-        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(uuid);
+        final StorageReference mImageRef = FirebaseStorage.getInstance().getReference(uuid);
         mImageRef.putFile(Uri.parse(uri))
                 .addOnSuccessListener(activity, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -156,9 +156,6 @@ public class Utils {
                         //noinspection LogConditional
                         String path = taskSnapshot.getMetadata().getReference().getPath();
                         Log.d(TAG, "uploadPhoto:onSuccess:" + path);
-                        if (taskSnapshot.getDownloadUrl() != null) {
-                            callback.onImageUploaded(taskSnapshot.getDownloadUrl().toString(), report, key);
-                        }
                     }
                 })
                 .addOnFailureListener(activity, new OnFailureListener() {
@@ -168,7 +165,29 @@ public class Utils {
                         Toast.makeText(activity, "Upload failed",
                                 Toast.LENGTH_SHORT).show();
                     }
-                });
+                }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return mImageRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    callback.onImageUploaded(downloadUri.toString(), report, key);
+                } else {
+                    Log.w(TAG, "uploadPhoto:onError", task.getException());
+                    Toast.makeText(activity, "Upload failed",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public static boolean isOnline(Activity activity) {
@@ -177,4 +196,6 @@ public class Utils {
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+
+
 }

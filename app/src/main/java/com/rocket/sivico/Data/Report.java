@@ -180,4 +180,14 @@ public class Report implements Parcelable, ClusterItem {
     public LatLng getPosition() {
         return new LatLng(Double.parseDouble(this.getLat()), Double.parseDouble(this.getLon()));
     }
+
+    @Override
+    public String getTitle() {
+        return category;
+    }
+
+    @Override
+    public String getSnippet() {
+        return description;
+    }
 }

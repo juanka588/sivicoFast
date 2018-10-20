@@ -14,9 +14,11 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.rocket.sivico.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,9 +54,7 @@ public class MainActivity extends AppCompatActivity {
                         .setTheme(AuthUI.getDefaultTheme())
                         .setLogo(R.drawable.city_side)
                         .setAvailableProviders(getSelectedProviders())
-                        .setTosUrl(FIREBASE_TOS_URL)
-                        .setPrivacyPolicyUrl(FIREBASE_PRIVACY_POLICY_URL)
-                        .setAllowNewEmailAccounts(true)
+                        .setTosAndPrivacyPolicyUrls(FIREBASE_TOS_URL, FIREBASE_PRIVACY_POLICY_URL)
                         .build(),
                 RC_SIGN_IN);
     }
@@ -87,12 +87,12 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
+            if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
                 showSnackbar(R.string.no_internet_connection);
                 return;
             }
 
-            if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+            if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
                 showSnackbar(R.string.unknown_error);
                 return;
             }
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startSignedInActivity(IdpResponse response) {
-        if (response.getProviderType().equals(AuthUI.PHONE_VERIFICATION_PROVIDER)) {
+        if (response.getProviderType().equals(PhoneAuthProvider.PHONE_SIGN_IN_METHOD)) {
             startActivity(new Intent(MainActivity.this, ReportsActivity.class));
         } else {
             Log.i(TAG, response.getEmail());
@@ -112,29 +112,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private List<AuthUI.IdpConfig> getSelectedProviders() {
-        List<AuthUI.IdpConfig> selectedProviders = new ArrayList<>();
-
-        selectedProviders.add(
-                new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER)
-                        .setPermissions(new ArrayList<String>())
-                        .build());
-
-
-        selectedProviders.add(
-                new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER)
-                        .setPermissions(getFacebookPermissions())
-                        .build());
-
-//            selectedProviders.add(new AuthUI.IdpConfig.Builder(AuthUI.TWITTER_PROVIDER).build());
-
-        selectedProviders.add(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build());
-
-
-        selectedProviders.add(
-                new AuthUI.IdpConfig.Builder(AuthUI.PHONE_VERIFICATION_PROVIDER).build());
-
-
-        return selectedProviders;
+        return
+                Arrays.asList(
+                        new AuthUI.IdpConfig.GoogleBuilder().build(),
+                        new AuthUI.IdpConfig.FacebookBuilder().build(),
+                        new AuthUI.IdpConfig.EmailBuilder().build(),
+                        new AuthUI.IdpConfig.PhoneBuilder().build()
+//                        new AuthUI.IdpConfig.AnonymousBuilder().build()
+                );
     }
 
     private List<String> getFacebookPermissions() {
