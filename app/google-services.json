@@ -1,43 +1,35 @@
 {
   "project_info": {
-    "project_number": "56305061820",
-    "firebase_url": "https://sivico-colombia.firebaseio.com",
-    "project_id": "sivico-colombia",
-    "storage_bucket": "sivico-colombia.appspot.com"
+    "project_number": "37591922296",
+    "firebase_url": "https://vigiapp-220419.firebaseio.com",
+    "project_id": "vigiapp-220419",
+    "storage_bucket": "vigiapp-220419.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:56305061820:android:8d99c836a5cc8943",
+        "mobilesdk_app_id": "1:37591922296:android:8d99c836a5cc8943",
         "android_client_info": {
           "package_name": "com.rocket.sivico"
         }
       },
       "oauth_client": [
         {
-          "client_id": "56305061820-0hmp3tpcodhr8kkq3h7s5jag7g66g5ej.apps.googleusercontent.com",
+          "client_id": "37591922296-tn2i3aa6qqpa76a7g82boambfd2jhhgo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rocket.sivico",
+            "certificate_hash": "16a935c5ef919c8e1c8f78bc31cf2a2d19d86b5c"
+          }
+        },
+        {
+          "client_id": "37591922296-190svi1gcjt5s751go2vo8ale2bdaioc.apps.googleusercontent.com",
           "client_type": 3
-        },
-        {
-          "client_id": "56305061820-jk5osvl7eb4rlgq61uc6aa9btrnpoa7b.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.rocket.sivico",
-            "certificate_hash": "9f65e61b1099e7e5fd4cd0c8f90c1d7673277756"
-          }
-        },
-        {
-          "client_id": "56305061820-ra4dm97bs108s9lh2f64r178rdiibdtn.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.rocket.sivico",
-            "certificate_hash": "82e5c221da0cf2300478401777d4c5f08808f968"
-          }
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBXuDCZzaMqw2xNWJ3LmmxqISutwIwTAmg"
+          "current_key": "AIzaSyBT0hpwhHvwr2JHJV7ilhdrF5RgpgMyxLQ"
         }
       ],
       "services": {
@@ -48,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "56305061820-0hmp3tpcodhr8kkq3h7s5jag7g66g5ej.apps.googleusercontent.com",
+              "client_id": "37591922296-190svi1gcjt5s751go2vo8ale2bdaioc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

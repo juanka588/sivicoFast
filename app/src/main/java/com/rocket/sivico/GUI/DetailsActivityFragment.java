@@ -65,6 +65,9 @@ public class DetailsActivityFragment extends Fragment {
         ImageView image = inflate.findViewById(R.id.report_image);
         Picasso.with(getContext())
                 .load(report.getEvidencesList().get(0).getImage())
+                .fit()
+                .centerCrop()
+                .placeholder(R.drawable.city_side)
                 .into(image);
         image.setOnClickListener(new View.OnClickListener() {
             @Override

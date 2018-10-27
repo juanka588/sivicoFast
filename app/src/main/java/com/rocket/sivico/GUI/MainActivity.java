@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startSignedInActivity(IdpResponse response) {
-        if (response.getProviderType().equals(PhoneAuthProvider.PHONE_SIGN_IN_METHOD)) {
+        if (response.getProviderType().equals(PhoneAuthProvider.PROVIDER_ID)) {
             startActivity(new Intent(MainActivity.this, ReportsActivity.class));
         } else {
             Log.i(TAG, response.getEmail());

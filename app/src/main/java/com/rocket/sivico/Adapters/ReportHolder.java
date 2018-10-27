@@ -42,6 +42,7 @@ public class ReportHolder extends RecyclerView.ViewHolder {
         Picasso.with(this.cv.getContext())
                 .load(report.getEvidence().get("img1").toString())
                 .fit()
+                .placeholder(R.drawable.ic_file_upload)
                 .into(this.image);
     }
 }

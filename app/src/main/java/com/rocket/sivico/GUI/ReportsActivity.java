@@ -135,7 +135,10 @@ public class ReportsActivity extends SivicoMenuActivity implements OnReportClick
             finish();
         }
         String id = mAuth.getCurrentUser().getUid();
-        Query query = mReportRef.orderByChild("owner").startAt(id).endAt(id);
+        Query query = mReportRef.orderByChild("owner")
+                .startAt(id).endAt(id)
+                .limitToLast(50);
+
         FirebaseRecyclerOptions<Report> options =
                 new FirebaseRecyclerOptions.Builder<Report>()
                         .setQuery(query, Report.class)

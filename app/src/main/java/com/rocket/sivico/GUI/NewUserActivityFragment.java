@@ -267,6 +267,11 @@ public class NewUserActivityFragment extends Fragment {
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
                     Uri downloadUri = task.getResult();
+                    if (downloadUri == null) {
+                        Log.w(TAG, "uploadPhoto:onError", task.getException());
+                        return;
+                    }
+                    newUser.setPhoto(downloadUri.toString());
                     callback.onEditUser(newUser);
                 } else {
                     Log.w(TAG, "uploadPhoto:onError", task.getException());
@@ -292,7 +297,7 @@ public class NewUserActivityFragment extends Fragment {
         if (user.isGender()) {
             rb = maleRB;
         }
-        rb.setSelected(true);
+        gender.check(rb.getId());
         userIdNumber.setText(user.getIdNumber());
         userPhone.setText(user.getPhone());
         region.setText(user.getRegion());
@@ -317,6 +322,9 @@ public class NewUserActivityFragment extends Fragment {
     }
 
     private void displayPhoto() {
+        if (imageUri == null || imageUri.getPath() == null) {
+            return;
+        }
         File photo = new File(imageUri.getPath());
         Utils.loadRoundPhoto(getContext(), userPhoto, getResources(), photo);
         userPhoto.setVisibility(View.VISIBLE);

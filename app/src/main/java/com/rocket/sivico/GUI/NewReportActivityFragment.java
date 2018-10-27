@@ -255,7 +255,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
                     Report report = bindReportFromControls();
                     if (report == null) {
                         Log.e(TAG, "error binding report");
-                        Toast.makeText(getContext(), "Report not created",
+                        Toast.makeText(getContext(), "Reporte no creado fecha invalida",
                                 Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -291,6 +291,9 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
             dateTime = Utils.sivicoDateAndHourFormat.parse(dateTx.getText().toString()
                     + " "
                     + hourTx.getText().toString());
+            if (dateTime.after(new Date())) {
+                return null;
+            }
             String desc = descriptionTx.getText().toString();
             if (desc.isEmpty()) {
                 desc = "Mi nuevo reporte de " + category.getName();

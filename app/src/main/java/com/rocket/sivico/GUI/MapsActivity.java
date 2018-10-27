@@ -68,7 +68,10 @@ public class MapsActivity extends SivicoMenuActivity implements OnMapReadyCallba
         mMap = googleMap;
 
         setUpClusters();
-        mReportRef = FirebaseDatabase.getInstance().getReference().child("reports");
+        mReportRef = FirebaseDatabase.getInstance()
+                .getReference("reports")
+                .orderByChild("date").limitToLast(50)
+                .getRef();
         mReportRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
