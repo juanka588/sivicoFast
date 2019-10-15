@@ -78,6 +78,7 @@ public class NewUserActivityFragment extends Fragment {
     private int mDay;
     private boolean genderSelected;
     private boolean isAnonymous;
+    private int score;
 
     public NewUserActivityFragment() {
     }
@@ -186,6 +187,7 @@ public class NewUserActivityFragment extends Fragment {
         });
     }
 
+    //TODO: debug this cases split in more methods
     private void bindFromControls(OnEditUser callback) {
         Date date = new Date();
         try {
@@ -193,6 +195,7 @@ public class NewUserActivityFragment extends Fragment {
         } catch (ParseException e) {
             Log.e(TAG, e.toString(), e.fillInStackTrace());
         }
+        isAnonymous = anonymousSwitch.isChecked();
         if (editedUser != null) {
             editedUser.setName(userName.getText().toString());
             editedUser.setIdNumber(userIdNumber.getText().toString());
@@ -201,13 +204,14 @@ public class NewUserActivityFragment extends Fragment {
             editedUser.setPhone(userPhone.getText().toString());
             editedUser.setRegion(region.getText().toString());
             editedUser.setNeighborhood(neighborhood.getText().toString());
+            editedUser.setScore(score);
             if (imageUri != null) {
                 uploadPhoto(callback, editedUser);
                 return;
             }
             callback.onEditUser(editedUser);
+            return;
         }
-        isAnonymous = anonymousSwitch.isChecked();
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         Uri photoUrl = firebaseUser.getPhotoUrl();
         String uri;
@@ -302,6 +306,7 @@ public class NewUserActivityFragment extends Fragment {
         userPhone.setText(user.getPhone());
         region.setText(user.getRegion());
         neighborhood.setText(user.getNeighborhood());
+        score = user.getScore();
     }
 
     @Override

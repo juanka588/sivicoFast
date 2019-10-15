@@ -27,13 +27,20 @@ public class User implements Parcelable {
                 String phone, String region, String neighborhood,
                 String email, String photo, int score) {
         this.id = id;
-        this.name = name;
+        if (name == null || name.isEmpty()) {
+            this.name = "VigiApp User";
+        } else {
+            this.name = name;
+        }
         this.idNumber = idNumber;
         this.gender = gender;
         this.birthday = birthday;
         this.phone = phone;
         this.region = region;
         this.neighborhood = neighborhood;
+        if (email == null || email.isEmpty()) {
+            this.email = "phone@email.com";
+        }
         this.email = email;
         this.photo = photo;
         this.score = score;

@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sivicoFast.iml" filepath="$PROJECT_DIR$/sivicoFast.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sivico.iml" filepath="$PROJECT_DIR$/sivico.iml" />
     </modules>
   </component>
 </project>

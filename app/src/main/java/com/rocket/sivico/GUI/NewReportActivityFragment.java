@@ -242,6 +242,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
 
                             }
                         }, mYear, mMonth, mDay);
+                datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 datePickerDialog.show();
             }
         });
@@ -370,7 +371,7 @@ public class NewReportActivityFragment extends Fragment implements HandleNewLoca
         preview.setVisibility(View.VISIBLE);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         Bitmap bmp = BitmapFactory.decodeFile(photo.getAbsolutePath());
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 80, bos);
         InputStream in = new ByteArrayInputStream(bos.toByteArray());
         try {
             byte[] buffer = new byte[in.available()];
